@@ -184,6 +184,7 @@ public class ADOUsuarios {
                 u.setEmail(rs.getString("email"));
                 u.setUltimaConexion(rs.getDate("ultimaConexion"));
                 u.setEstatus(rs.getBoolean("estatus"));
+                u.setIdPerfil(rs.getInt("Perfiles_idPerfil"));
                 //Lo adicionamos a nuestra lista
                 lista.add(u);
             }
@@ -215,13 +216,14 @@ public class ADOUsuarios {
             //Consultamos si hay datos para recorrerlo
             //e insertarlo en nuestro array
             while (rs.next()) {
-                //Obtenemos los valores de la consulta y creamos
-                //nuestro objeto usuario
+                
                 usuario.setIdUsuario(rs.getInt("idUsuario"));
                 usuario.setNombreUsuario(rs.getString("nombreUsuario"));
                 usuario.setEmail(rs.getString("email"));
+                usuario.setClave(rs.getString("clave"));
                 usuario.setUltimaConexion(rs.getDate("ultimaConexion"));
                 usuario.setEstatus(rs.getBoolean("estatus"));
+                usuario.setIdPerfil(rs.getInt("Perfiles_idPerfil"));
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);
@@ -258,6 +260,7 @@ public class ADOUsuarios {
                 usuario.setEmail(rs.getString("email"));
                 usuario.setUltimaConexion(rs.getDate("ultimaConexion"));
                 usuario.setEstatus(rs.getBoolean("estatus"));
+                usuario.setIdPerfil(rs.getInt("Perfiles_idPerfil"));
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);
@@ -271,33 +274,38 @@ public class ADOUsuarios {
         return usuario;
     }
     
-    public static synchronized boolean loginUsuario(Usuarios user) {
-        boolean rpta = false;
+    public static synchronized boolean loginUsuario(String nombre, String clave) {
         Usuarios usuario = new Usuarios();
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs = null;
+        boolean rpta = false;
         try {
             //Nombre del procedimiento almacenado
             String call = "{CALL obtenerUsuarioByNombre(?)}";
             cn = Conexion.getConexion();
             cl = cn.prepareCall(call);
-            cl.setString(1, user.getNombreUsuario());
+            cl.setString(1, nombre);
             //La sentencia lo almacenamos en un resulset
             rs = cl.executeQuery();
             //Consultamos si hay datos para recorrerlo
             //e insertarlo en nuestro array
             while (rs.next()) {
-                //Obtenemos los valores de la consulta y creamos
-                //nuestro objeto usuario
+                
+                usuario.setIdUsuario(rs.getInt("idUsuario"));
                 usuario.setNombreUsuario(rs.getString("nombreUsuario"));
+                usuario.setEmail(rs.getString("email"));
                 usuario.setClave(rs.getString("clave"));
                 usuario.setUltimaConexion(rs.getDate("ultimaConexion"));
-                
-                if (usuario.getClave().equals(user.getClave()) && usuario.getNombreUsuario().equals(user.getNombreUsuario())){
-                    rpta = true;
-                }
+                usuario.setEstatus(rs.getBoolean("estatus"));
+                usuario.setIdPerfil(rs.getInt("Perfiles_idPerfil"));
+ 
             }
+            
+            if (usuario.getClave().equals(clave) && usuario.getNombreUsuario().equals(nombre)){
+                rpta = true;
+            }
+           
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);
         } catch (SQLException e) {

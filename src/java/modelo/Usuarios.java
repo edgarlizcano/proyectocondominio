@@ -41,6 +41,8 @@ public class Usuarios implements Serializable {
     @Column(name = "idUsuario")
     private Integer idUsuario;
     
+    private Integer idPerfil;
+    
     @Basic(optional = false)
     @Column(name = "nombreUsuario")
     private String nombreUsuario;
@@ -91,6 +93,16 @@ public class Usuarios implements Serializable {
     public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
     }
+
+    public Integer getIdPerfil() {
+        return idPerfil;
+    }
+
+    public void setIdPerfil(Integer idPerfil) {
+        this.idPerfil = idPerfil;
+    }
+    
+    
 
     public String getNombreUsuario() {
         return nombreUsuario;

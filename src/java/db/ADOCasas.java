@@ -103,6 +103,40 @@ public class ADOCasas {
         return lista;
     }
     
+    //Metodo utilizado para obtener una casa específica de nuestra base de datos
+    public static synchronized Casas getCasaByHabitante(int idHab) {
+        Casas casa = new Casas();
+        Connection cn = null;
+        CallableStatement cl = null;
+        ResultSet rs = null;
+        try {
+            //Nombre del procedimiento almacenado
+            String call = "{CALL obtenerCasaByHabitante(?)}";
+            cn = Conexion.getConexion();
+            cl = cn.prepareCall(call);
+            cl.setInt(1, idHab);
+            //La sentencia lo almacenamos en un resulset
+            rs = cl.executeQuery();
+            //Consultamos si hay datos para recorrerlo
+            //e insertarlo en nuestro array
+            while (rs.next()) {
+                //Obtenemos los valores de la consulta y creamos
+                //nuestro objeto usuario
+                casa.setIdCasas(rs.getInt("idCasa"));
+                casa.setNombreCasa(rs.getString("nombreCasa"));
+            }
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (SQLException e) {
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (Exception e) {
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        }
+        return casa;
+    }
+    
     /*
     public static synchronized boolean actualizarUsuario(Usuarios user, String newPass) {
         Connection cn = null;

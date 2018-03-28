@@ -5,26 +5,21 @@
  */
 package control;
 
-import db.ADOHabitantes;
-import db.ADOModulos;
+import db.ADOCasas;
 import db.ADOUsuarios;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import modelo.Habitantes;
-import modelo.Modulos;
-import modelo.Usuarios;
+import modelo.Casas;
 
 /**
  *
  * @author Edgar
  */
-public class LoginServlet extends HttpServlet {
+public class ControladorCasas extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,27 +33,16 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession sesion = request.getSession();
-
-        String nombre = request.getParameter("usuario");
-        String clave = request.getParameter("passw");
-        
-        boolean rpta = ADOUsuarios.loginUsuario(nombre, clave);
- 
-        if (rpta){
-            Usuarios usuario = ADOUsuarios.getUsuarioByNombre(nombre);
-            Habitantes hab = ADOHabitantes.obtenerHabitante(usuario.getIdUsuario());
-            ArrayList<Modulos> modulos = ADOModulos.obtenerModulosByPerfil(usuario.getIdPerfil());
-            sesion.setAttribute("modulos", modulos);
-            sesion.setAttribute("usuario", usuario);
-            sesion.setAttribute("habitante", hab);
-            response.sendRedirect("index.jsp");
-        }else{
-            sesion.setAttribute("mensaje", "Datos incorrectos, confirme sus datos");
-            response.sendRedirect("login.jsp");
-        }
+            String accion = request.getParameter("accion");
+            switch (accion) {
+                case "ObtenerCasaByHabitante":
+                    this.obtenerCasa(request, response);
+                    break;
+                default:
+                    break;
+            }
     }
-
+            
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -98,4 +82,22 @@ public class LoginServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+
+
+    private void obtenerCasa(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        int id = Integer.parseInt(request.getParameter("idHab"));
+        Casas casa = ADOCasas.getCasaByHabitante(id);
+
+        boolean rpta;
+        rpta = casa !=null;
+        if (rpta) {
+            //Si inserto lo redireccionamos a otra pagina que se llama "result.jsp"
+            request.setAttribute("casa", casa);
+            request.getRequestDispatcher("casa.jsp").forward(request, response);
+        } else {
+            //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
+            response.sendRedirect("result.jsp?men=No se encontro registro de Casa");
+        }
+        
+    }
 }

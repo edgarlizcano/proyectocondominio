@@ -24,6 +24,10 @@
         <servlet-name>ControladorCuotas</servlet-name>
         <servlet-class>control.ControladorCuotas</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControladorCasas</servlet-name>
+        <servlet-class>control.ControladorCasas</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorUsuarios</servlet-name>
         <url-pattern>/ControladorUsuarios</url-pattern>
@@ -47,6 +51,10 @@
     <servlet-mapping>
         <servlet-name>ControladorCuotas</servlet-name>
         <url-pattern>/ControladorCuotas</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControladorCasas</servlet-name>
+        <url-pattern>/ControladorCasas</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

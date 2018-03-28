@@ -1,3 +1,4 @@
+<%@page import="modelo.Habitantes"%>
 <%@page import="modelo.Usuarios"%>
 <%@page import="modelo.Usuarios"%>
 <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
@@ -13,7 +14,8 @@
                     <%
                 }
             %>
-        </li>  
+        </li> 
+       
         <li class="nav-item text-nowrap">
           <a class="nav-link" href="logout.jsp">Sign out</a>
         </li>

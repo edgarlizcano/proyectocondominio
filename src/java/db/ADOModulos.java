@@ -105,6 +105,48 @@ public class ADOModulos {
         return lista;
     }
     
+    public static synchronized ArrayList<Modulos> obtenerModulosByPerfil(int idPerfil) {
+        //El array que contendra todos nuestros productos
+        ArrayList<Modulos> lista = new ArrayList<>();
+        Connection cn = null;
+        CallableStatement cl = null;
+        ResultSet rs;
+        try {
+            //Nombre del procedimiento almacenado
+            String call = "{CALL obtenerModulosByPerfil(?)}";
+            
+            cn = Conexion.getConexion();
+            cl = cn.prepareCall(call);
+            
+            cl.setInt(1, idPerfil);
+            //La sentencia lo almacenamos en un resulset
+            rs = cl.executeQuery();
+            //cl.execute();
+            //rs = cl.getResultSet();
+            //Consultamos si hay datos para recorrerlo
+            //e insertarlo en nuestro array
+            while (rs.next()) {
+                Modulos m = new Modulos();
+                //Obtenemos los valores de la consulta y creamos
+                //nuestro objeto producto
+                m.setIdModulo(rs.getInt("idModulo"));
+                m.setNombreModulo(rs.getString("nombreModulo"));
+                m.setUrlModulo(rs.getString("urlModulo"));
+                //Lo adicionamos a nuestra lista
+                lista.add(m);
+            }
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (SQLException e) {
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (Exception e) {
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        }
+        return lista;
+    }
+    
     /*
     public static synchronized boolean actualizarUsuario(Usuarios user, String newPass) {
         Connection cn = null;

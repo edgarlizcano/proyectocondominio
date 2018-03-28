@@ -125,6 +125,59 @@ public class ADOHabitantes {
         return lista;
     }
     
+    public static synchronized Habitantes obtenerHabitante(int idUser) {
+        //El array que contendra todos nuestros productos
+        Habitantes h = new Habitantes ();
+        Casas c = new Casas();
+        Calles ca = new Calles();
+        
+        Connection cn = null;
+        CallableStatement cl = null;
+        ResultSet rs;
+        try {
+            
+            //Nombre del procedimiento almacenado
+            String call = "{CALL obtenerHabitanteByUsuario(?)}";
+            cn = Conexion.getConexion();
+            cl = cn.prepareCall(call);
+            cl.setInt(1, idUser);
+            //La sentencia lo almacenamos en un resulset
+            rs = cl.executeQuery();
+            //cl.execute();
+            //rs = cl.getResultSet();
+            //Consultamos si hay datos para recorrerlo
+            //e insertarlo en nuestro array
+            while (rs.next()) {
+                h.setIdHabitante(rs.getInt("idHabitante"));
+                h.setCedula(rs.getString("cedula"));
+                h.setNombres(rs.getString("nombres"));
+                h.setApellidos(rs.getString("apellidos"));
+                h.setFechaNacimiento(rs.getString("fechaNacimiento"));
+                h.setEstatus(rs.getBoolean("estatus"));
+                
+                c.setIdCasas(rs.getInt("idCasa"));
+                c.setNombreCasa(rs.getString("nombreCasa"));
+                
+                ca.setIdCalles(rs.getInt("idCalles"));
+                ca.setNombreCalle(rs.getString("nombreCalle"));
+                
+                c.setCalles(ca);
+                h.setCasas(c);
+            }
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (SQLException e) {
+            System.out.println("Error SQL: "+e.getMessage());
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (Exception e) {
+            System.out.println("Error general: "+e.getMessage());
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        }
+        return h;
+    }
+    
     /*
     public static synchronized boolean actualizarUsuario(Usuarios user, String newPass) {
         Connection cn = null;
