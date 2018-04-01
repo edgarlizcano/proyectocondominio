@@ -30,10 +30,7 @@
                         for (Modulos m : modulos) {
                 %>
                     <li class="nav-item">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><%= m.getNombreModulo() %></a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="<%= m.getUrlModulo()%>">Lista de <%= m.getNombreModulo() %></a>
-                            </div>
+                        <a class="dropdown-item" href="<%= m.getUrlModulo()%>" role="button" aria-haspopup="true" aria-expanded="false"><%= m.getNombreModulo() %></a>
                     </li>
                 <%
                         }

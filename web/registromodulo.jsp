@@ -20,12 +20,16 @@
               <h1 class="h2">Condominio El Cardenal</h1>
             </div>
             <div class="container-fluid">
-                <h1>Registro de Banco</h1>
+                <h1>Registro de Módulo</h1>
                 <form action="ControladorBancos" method="POST">
-                    <input type="hidden" name="accion" value="RegistroBanco" />
-                    <label>Introduzca el Nombre del Banco</label>
+                    <input type="hidden" name="accion" value="RegistroModulo" />
+                    <label>Introduzca el Nombre del Módulo</label>
                     <br>
-                    <input type="text" name="nombreBanco" value="" size="30" />
+                    <input type="text" name="nombreModulo" value="" size="30" />
+                    <br>
+                    <label>Introduzca la URL del Módulo</label>
+                    <br>
+                    <input type="text" name="urlModulo" value="" size="100" />
                     <br>
                     <br>
                     <input class="btn btn-success" type="submit" value="Registrar" name="Enviar" />

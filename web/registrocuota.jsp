@@ -36,7 +36,7 @@
                     <input type="number" name="monto" value="" size="30" />
                     <br>
                     <br>
-                    <input type="submit" value="Registrar" name="Enviar" />
+                    <input class="btn btn-success" type="submit" value="Registrar" name="Enviar" />
                     <br>
                     <br>
                 </form>

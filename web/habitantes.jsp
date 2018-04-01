@@ -24,65 +24,77 @@
             </div>
             <div class="container-fluid">
                 <h1 class="h2">Lista de Habitantes</h1>
-                    <table border="1">
-                        <tr>
-                            <td>ID Habitante</td>
-                            <td>Cédula</td>
-                            <td>Nombres</td>
-                            <td>Apellidos</td>
-                            <td>Fecha de Nacimiento</td>
-                            <td>ID Casa</td>
-                            <td>Nombre Casa</td>
-                            <td>ID Calle</td>
-                            <td>Nombre Calle</td>
-                            <td>Estatus</td>
-                            <td colspan="2">Acciones</td>
-                        </tr>
-                        <%-- Lista de todos los Usuarios --%>
-                        <%
+                    <div>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">ID Habitante</th>
+                                    <th scope="col">Cédula</th>
+                                    <th scope="col">Nombres</th>
+                                    <th scope="col">Apellidos</th>
+                                    <th scope="col">Fecha de Nacimiento</th>
+                                    <th scope="col">ID Casa</th>
+                                    <th scope="col">Nombre Casa</th>
+                                    <th scope="col">ID Calle</th>
+                                    <th scope="col">Nombre Calle</th>
+                                    <th scope="col">Estatus</th>
+                                    <th scope="col" colspan="2">Acciones</th>
+                                </tr>  
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <%-- Lista de todos los Habitantes --%>
+                                <%
                                     ArrayList<Habitantes> lista = ADOHabitantes.obtenerHabitantes();
                                     for (Habitantes h : lista) {
-                        %>
-                        <tr>
-                            <td><%= h.getIdHabitante() %></td>
-                            <td><%= h.getCedula() %></td>
-                            <td><%= h.getNombres() %></td>
-                            <td><%= h.getApellidos() %></td>
-                            <td><%= h.getFechaNacimiento() %></td>
-                            <td><%= h.getCasas().getIdCasas() %></td>
-                            <td><%= h.getCasas().getNombreCasa() %></td>
-                            <td><%= h.getCasas().getCalles().getIdCalles() %></td>
-                            <td><%= h.getCasas().getCalles().getNombreCalle()%></td>
-                            <%-- Muestra Activo o Inactivo según estado del Usuario --%>
-                            <td><%
-                                    if (h.isEstatus()){
-                                        out.print("Activo");
-                                    }else{
-                                        out.print("Inactivo");
-                                    }
                                 %>
-                            </td>
-                            <%-- Enlaces a las paginas de Actualizar o eliminar Usuario --%>
-                            <td>
-                                <form action="ControladorUsuarios">
-                                    <input type="hidden" name="accion" value="EliminarUsuario" />
-                                    <input type="hidden" name="id" value="<%= h.getIdHabitante() %>" />
-                                    <input type="submit" value="Eliminar" name="Eliminar" />
-                                </form>
-                                <form action="actualizarUsuario.jsp">
-                                    <input type="hidden" name="accion" value="ActualizarUsuario" />
-                                    <input type="hidden" name="id" value="<%= h.getIdHabitante() %>" />
-                                    <input type="submit" value="Actualizar" name="Actualizar" />
-                                </form>
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td><%= h.getIdHabitante() %></td>
+                                    <td><%= h.getCedula() %></td>
+                                    <td><%= h.getNombres() %></td>
+                                    <td><%= h.getApellidos() %></td>
+                                    <td><%= h.getFechaNacimiento() %></td>
+                                    <td><%= h.getCasas().getIdCasas() %></td>
+                                    <td><%= h.getCasas().getNombreCasa() %></td>
+                                    <td><%= h.getCasas().getCalles().getIdCalles() %></td>
+                                    <td><%= h.getCasas().getCalles().getNombreCalle()%></td>
+                                    <%-- Muestra Activo o Inactivo según estado del Usuario --%>
+                                    <td><%
+                                            if (h.isEstatus()){
+                                                out.print("Activo");
+                                            }else{
+                                                out.print("Inactivo");
+                                            }
+                                        %>
+                                    </td>
+                                    <%-- Enlaces a las paginas de Actualizar o eliminar Habitante --%>
+                                                                       
+                                    <td>    
+                                        <a class="btn btn-info" role="button" href="actualizarHabitante.jsp?id=<%= h.getIdHabitante() %>">Actualizar</a>
+                                        <a class="btn btn-danger" role="button" href="ControladorHabitantes?accion=EliminarHabitante&id=<%= h.getIdHabitante() %>">Eliminar</a>
+                                    </td>
+                                </tr>
+                                <%
+                                            }
+                                %>
+                              </tr>
+                            </tbody>
+                          </table>
                         <%
-                                    }
+                            String men=request.getParameter("men");
+                            if(men!= null){
+                                %>
+                                    <h1><%=men%></h1>
+                                <%
+                        }
                         %>
-
-                    </table>
+                    </div>
             </div>
-            
+            <div class="container-fluid">
+                <a class="btn btn-success" role="button" href="registrohabitante.jsp">Ingresar Nuevo Habitante</a>
+            </div>
+                    <br>
+                    <br>
         </main>
       </div>
     </div>

@@ -13,6 +13,11 @@
 <html lang="en">
   <%@include file="head.jsp" %>
   <%@include file="access.jsp" %>
+    <script> 
+        function enviar(){ 
+           document.formActualizar.submit(); 
+        } 
+    </script>
   <body>    
     <%@include file="nav.jsp" %>
     <div class="container-fluid">
@@ -58,17 +63,9 @@
                                     %>
                                 </td>
                                 <%-- Enlaces a las paginas de Actualizar o eliminar Usuario --%>
-                                <td>
-                                    <form action="ControladorUsuarios">
-                                        <input type="hidden" name="accion" value="EliminarUsuario" />
-                                        <input type="hidden" name="id" value="<%= u.getIdUsuario() %>" />
-                                        <input type="submit" value="Eliminar" name="Eliminar" />
-                                    </form>
-                                    <form action="actualizarUsuario.jsp">
-                                        <input type="hidden" name="accion" value="ActualizarUsuario" />
-                                        <input type="hidden" name="id" value="<%= u.getIdUsuario() %>" />
-                                        <input type="submit" value="Actualizar" name="Actualizar" />
-                                    </form>
+                                <td>    
+                                    <a class="btn btn-info" role="button" href="actualizarUsuario.jsp?id=<%= u.getIdUsuario() %>">Actualizar</a>
+                                    <a class="btn btn-danger" role="button" href="ControladorUsuarios?accion=EliminarUsuario&id=<%= u.getIdUsuario() %>">Eliminar</a>
                                 </td>
                             </tr>
                             <%
@@ -77,11 +74,23 @@
                           </tr>
                         </tbody>
                       </table>
-  
-            </div> 
+                    <%
+                        String men=request.getParameter("men");
+                        if(men!= null){
+                            %>
+                                <h1><%=men%></h1>
+                            <%
+                    }
+                    %>
             
+        
+                </div>
+            </div>
+            <div class="container-fluid">
+                <a class="btn btn-success" role="button" href="registrousuario.jsp">Ingresar Nuevo Usuario</a>
+            </div>
         </main>
-      </div>
+        </div>
     </div>
   </body>
   <%@include file ="scripts.jsp" %>

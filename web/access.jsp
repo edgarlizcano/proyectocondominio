@@ -13,16 +13,4 @@
     if(sesion.getAttribute("usuario") == null){
         response.sendRedirect("login.jsp");
     }
-    /*else{
-        ArrayList <Modulos> lista = (ArrayList <Modulos>) sesion.getAttribute("modulos");
-        boolean rpta = false;
-        for( Modulos m: lista ){
-            if (m.getUrlModulo().equals(request.getRequestURI())){
-                rpta = true;
-            }
-        }
-        if (rpta){
-            response.sendRedirect("index.jsp");
-        }
-    } */  
 %>

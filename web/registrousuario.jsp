@@ -26,6 +26,7 @@
                 <h1>Registro de Usuario</h1>
                 <form action="ControladorUsuarios" method="POST">
                     <input type="hidden" name="accion" value="RegistroUsuario" />
+                    <br>
                     <label>Introduzca el Nombre de Usuario</label>
                     <br>
                     <input type="text" name="nombreUsuario" value="" size="30" />
@@ -77,7 +78,7 @@
                     </select>
                     <br>
                     <br>
-                    <input type="submit" value="Registrar" name="Enviar" />
+                    <input type="submit" class="btn btn-success" value="Registrar" name="Enviar" />
                     <br>
                     <br>
                 </form>

@@ -42,21 +42,13 @@
                                     for (Modulos m : lista) {
                         %>
                         <tr>
-                            <th scope="row"><%= m.getIdModulo() %></th>
+                            <td><%= m.getIdModulo() %></td>
                             <td><%= m.getNombreModulo() %></td>
                             <td><%= m.getUrlModulo() %></td>
-                            <%-- Enlaces a las paginas de Actualizar o eliminar Usuario --%>
+                            <%-- Enlaces a las paginas de Actualizar o eliminar Modulo --%>
                             <td>
-                                <form action="ControladorUsuarios">
-                                    <input type="hidden" name="accion" value="EliminarUsuario" />
-                                    <input type="hidden" name="id" value="<%= m.getIdModulo() %>" />
-                                    <input type="submit" value="Eliminar" name="Eliminar" />
-                                </form>
-                                <form action="actualizarUsuario.jsp">
-                                    <input type="hidden" name="accion" value="ActualizarUsuario" />
-                                    <input type="hidden" name="id" value="<%= m.getIdModulo() %>" />
-                                    <input type="submit" value="Actualizar" name="Actualizar" />
-                                </form>
+                                <a class="btn btn-info" role="button" href="actualizarModulo.jsp?id=<%= m.getIdModulo() %>">Actualizar</a>
+                                <a class="btn btn-danger" role="button" href="ControladorModulos?accion=EliminarModulo&id=<%= m.getIdModulo() %>">Eliminar</a>
                             </td>
                         </tr>
                         <%
@@ -64,10 +56,23 @@
                         %>
                     </tbody>
                   </table>
+                    <%
+                        String men = request.getParameter("men");
+                        if(men!= null){
+                            %>
+                                <h1><%=men%></h1>
+                            <%
+                        }
+                    %>
+            </div>
+            <div class="container-fluid">
+                <a class="btn btn-success" role="button" href="registromodulo.jsp">Ingresar Nuevo Módulo</a>
             </div>
         </main>
       </div>
     </div>
+            <br>
+            <br>
   </body>
   <%@include file ="scripts.jsp" %>
 </html>

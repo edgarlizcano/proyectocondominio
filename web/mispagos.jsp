@@ -23,7 +23,7 @@
               <h1 class="h2">Condominio El Cardenal</h1>
             </div>
             <div class="container-fluid">
-                <h1 class="h2">Lista de Pagos</h1>
+                <h1 class="h2">Mis Pagos</h1>
                 <table class="table">
                     <thead class="thead-dark">
                         <tr>
@@ -39,7 +39,8 @@
                     <tbody>
                     <%-- Lista de todos los Usuarios --%>
                     <%
-                        ArrayList<CasasHasCuotas> lista = ADOPagos.obtenerPagos();
+                        Habitantes h = (Habitantes) session.getAttribute("habitante");
+                        ArrayList<CasasHasCuotas> lista = ADOPagos.obtenerPagosByHabitante(h.getIdHabitante());
                         for (CasasHasCuotas c : lista) {
                     %>
                     <tr>
@@ -52,22 +53,18 @@
                         <td><%= c.getCasas().getNombreCasa() %></td>
                     </tr>
                     <%
-                        }
+                                }
                     %>
                     </tbody>
                 </table>
-                <%
-                    String men = request.getParameter("men");
-                    if(men!= null){
-                        %>
-                            <h1><%=men%></h1>
-                        <%
-                    }
-                %>
             </div>
-            <div class="container-fluid">
-                <a class="btn btn-success" role="button" href="registropago.jsp">Ingresar Nuevo Pago</a>
-            </div>
+                    
+                    <form action="ControladorPagos" method="POST">
+                        <input type="hidden" name="accion" value="ObtenerPagosPorHabitante" />
+                        <input type="hidden" name="idHab" value="<%= h.getIdHabitante() %>" />
+                        <input type="submit" value="Generar Reporte" />
+                    </form>
+            
         </main>
       </div>
     </div>

@@ -24,14 +24,17 @@
             </div>
             <div class="container-fluid">
                 <h1 class="h2">Lista de Cuotas</h1>
-                <table border="1">
-                    <tr>
-                        <td>ID Cuota</td>
-                        <td>Nombre Cuota</td>
-                        <td>Fecha</td>
-                        <td>Monto</td>
-                        <td colspan="2">Acciones</td>
-                    </tr>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">ID Cuota</th>
+                            <th scope="col">Nombre Cuota</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Monto</th>
+                            <th scope="col" colspan="2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     <%-- Lista de todos los Usuarios --%>
                     <%
                                 ArrayList<Cuotas> lista = ADOCuotas.obtenerCuotas();
@@ -42,26 +45,29 @@
                         <td><%= c.getNombre() %></td>
                         <td><%= c.getFecha() %></td>
                         <td><%= c.getMonto() %></td>
-                        <%-- Enlaces a las paginas de Actualizar o eliminar Usuario --%>
+                        <%-- Enlaces a las paginas de Actualizar o eliminar Cuotas--%>
                         <td>
-                            <form action="ControladorUsuarios">
-                                <input type="hidden" name="accion" value="EliminarUsuario" />
-                                <input type="hidden" name="id" value="<%= c.getIdCuotas() %>" />
-                                <input type="submit" value="Eliminar" name="Eliminar" />
-                            </form>
-                            <form action="actualizarUsuario.jsp">
-                                <input type="hidden" name="accion" value="ActualizarUsuario" />
-                                <input type="hidden" name="id" value="<%= c.getIdCuotas() %>" />
-                                <input type="submit" value="Actualizar" name="Actualizar" />
-                            </form>
+                                    <a class="btn btn-info" role="button" href="actualizarcuota.jsp?id=<%= c.getIdCuotas() %>">Actualizar</a>
+                                    <a class="btn btn-danger" role="button" href="ControladorCuotas?accion=EliminarCuota&id=<%= c.getIdCuotas() %>">Eliminar</a>
                         </td>
                     </tr>
                     <%
                                 }
                     %>
+                    </tbody>
                 </table>
+                <%
+                    String men = request.getParameter("men");
+                    if(men!= null){
+                        %>
+                            <h1><%=men%></h1>
+                        <%
+                    }
+                %>
             </div> 
-            
+            <div class="container-fluid">
+                <a class="btn btn-success" role="button" href="registrocuota.jsp">Ingresar Nueva Cuota</a>
+            </div>
         </main>
       </div>
     </div>

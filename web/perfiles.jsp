@@ -25,39 +25,53 @@
             </div>
             <div class="container-fluid">
                 <h1 class="h2">Lista de Perfiles</h1>
-                <table border="1">
-                    <tr>
-                        <td>ID Perfil</td>
-                        <td>Nombre Perfil</td>
-                        <td colspan="2">Acciones</td>
-                    </tr>
-                    <%-- Lista de todos los Usuarios --%>
+                
+                <table class="table">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th scope="col">ID Perfil</th>
+                            <th scope="col">Nombre Perfil</th>
+                            <th scope="col" colspan="2">Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            
+                              <%-- Lista de todos los Perfiles --%>
+                            <%
+                                        ArrayList<Perfiles> lista = ADOPerfiles.obtenerPerfiles();
+                                        for (Perfiles p : lista) {
+                            %>
+                            <tr>
+                                <td><%= p.getIdPerfil() %></td>
+                                <td><%= p.getNombrePerfil() %></td>
+                                
+                                <%-- Enlaces a las paginas de Actualizar o eliminar Perfil --%>
+                                <td>    
+                                    <a class="btn btn-info" role="button" href="actualizarperfil.jsp?id=<%= p.getIdPerfil() %>">Actualizar</a>
+                                    <a class="btn btn-danger" role="button" href="ControladorPerfiles?accion=EliminarPerfil&id=<%= p.getIdPerfil() %>">Eliminar</a>
+                                </td>
+                            </tr>
+                            <%
+                                        }
+                            %>
+                          </tr>
+                        </tbody>
+                      </table>
                     <%
-                                ArrayList<Perfiles> lista = ADOPerfiles.obtenerPerfiles();
-                                for (Perfiles p : lista) {
+                        String men = request.getParameter("men");
+                        if(men!= null){
+                            %>
+                                <h1><%=men%></h1>
+                            <%
+                        }
                     %>
-                    <tr>
-                        <td><%= p.getIdPerfil() %></td>
-                        <td><%= p.getNombrePerfil() %></td>
-                        <%-- Enlaces a las paginas de Actualizar o eliminar Usuario --%>
-                        <td>
-                            <form action="ControladorUsuarios">
-                                <input type="hidden" name="accion" value="EliminarUsuario" />
-                                <input type="hidden" name="id" value="<%= p.getIdPerfil() %>" />
-                                <input type="submit" value="Eliminar" name="Eliminar" />
-                            </form>
-                            <form action="actualizarUsuario.jsp">
-                                <input type="hidden" name="accion" value="ActualizarUsuario" />
-                                <input type="hidden" name="id" value="<%= p.getIdPerfil() %>" />
-                                <input type="submit" value="Actualizar" name="Actualizar" />
-                            </form>
-                        </td>
-                    </tr>
-                    <%
-                                }
-                    %>
-                </table>
+                
+                
             </div> 
+            <div class="container-fluid">
+                <a class="btn btn-success" role="button" href="registroperfil.jsp">Ingresar Nuevo Perfil</a>
+            </div>
         </main>
       </div>
     </div>

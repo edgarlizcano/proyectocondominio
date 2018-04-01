@@ -43,6 +43,7 @@ public class ControladorUsuarios extends HttpServlet {
         try {
             response.setContentType("text/html;charset=UTF-8");
             String accion = request.getParameter("accion");
+            
             switch (accion) {
                 case "RegistroUsuario":
                     this.registrarUsuario(request, response);
@@ -93,21 +94,22 @@ public class ControladorUsuarios extends HttpServlet {
     
     private void actualizarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Usuarios user = new Usuarios();
-        
         user.setIdUsuario(Integer.parseInt(request.getParameter("id")));
         user.setNombreUsuario(request.getParameter("nombreUsuario"));
         user.setEmail(request.getParameter("email"));
         user.setClave(request.getParameter("clave"));
+        String oldPass = request.getParameter("oldPass");
         String newPass = request.getParameter("newPass");
-        
-        boolean rpta;
-        rpta = ADOUsuarios.actualizarUsuario(user, newPass);
+        boolean rpta = false;
+        if(user.getClave().equals(oldPass)){
+            rpta = ADOUsuarios.actualizarUsuario(user, newPass);
+        }
         if (rpta) {
             //Si inserto lo redireccionamos a otra pagina que se llama "result.jsp"
-            response.sendRedirect("result.jsp?men=Se actualizó el Usuario de manera correcta");
+            response.sendRedirect("usuarios.jsp?men=Se actualizó el Usuario de manera correcta");
         } else {
             //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
-            response.sendRedirect("result.jsp?men=No se actualizó el Usuario");
+            response.sendRedirect("actualizarUsuario.jsp?id="+user.getIdUsuario()+"&men=No se actualizó el Usuario");
         }
     }
     
@@ -120,10 +122,10 @@ public class ControladorUsuarios extends HttpServlet {
         rpta = ADOUsuarios.eliminarUsuario(user);
         if (rpta) {
             //Si inserto lo redireccionamos a otra pagina que se llama "result.jsp"
-            response.sendRedirect("result.jsp?men=Se eliminó el Usuario de manera correcta");
+            response.sendRedirect("usuarios.jsp?men=Se eliminó el Usuario de manera correcta");
         } else {
             //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
-            response.sendRedirect("result.jsp?men=No se eliminó el Usuario");
+            response.sendRedirect("usuarios.jsp?men=No se pudo eliminar el Usuario");
         }
     }
 

@@ -8,12 +8,7 @@ package control;
 import db.ADOPagos;
 import db.ADOUsuarios;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -23,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import modelo.Bancos;
 import modelo.Casas;
 import modelo.Cuotas;
-import modelo.Habitantes;
 import modelo.Pagos;
 import modelo.Usuarios;
 
@@ -51,8 +45,8 @@ public class ControladorPagos extends HttpServlet {
                 case "RegistroPago":
                     this.registrarPago(request, response);
                     break;
-                /*case "ActualizarUsuario":
-                    this.actualizarUsuario(request, response);
+                /*case "ObtenerPagosPorHabitante":
+                    this.obtenerPagosPorHabitante(request, response);
                     break;
                 case "EliminarUsuario":
                     this.eliminarUsuario(request, response);
@@ -170,7 +164,5 @@ public class ControladorPagos extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-   
 
 }

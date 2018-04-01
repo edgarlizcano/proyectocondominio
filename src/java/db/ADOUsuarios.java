@@ -90,9 +90,7 @@ public class ADOUsuarios {
             cl.setInt(1, user.getIdUsuario());
             //El siguiente parametro del procedimiento almacenado es el nombre
             cl.setString(2, user.getEmail());
-            //Y por ultimo el precio
-            cl.setString(3, user.getClave());
-            cl.setString(4, newPass);
+            cl.setString(3, newPass);
             //Ejecutamos la sentencia y si nos devuelve el valor de 1 es porque
             //registro de forma correcta los datos
             rpta = cl.executeUpdate() == 1;
@@ -261,6 +259,7 @@ public class ADOUsuarios {
                 usuario.setUltimaConexion(rs.getDate("ultimaConexion"));
                 usuario.setEstatus(rs.getBoolean("estatus"));
                 usuario.setIdPerfil(rs.getInt("Perfiles_idPerfil"));
+                usuario.setClave(rs.getString("clave"));
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);

@@ -47,16 +47,8 @@
                             <td><%= b.getNombreBanco()%></td>
                             <%-- Enlaces a las paginas de Actualizar o eliminar Usuario --%>
                             <td>
-                                <form action="ControladorUsuarios">
-                                    <input type="hidden" name="accion" value="EliminarUsuario" />
-                                    <input type="hidden" name="id" value="<%= b.getIdBancos() %>" />
-                                    <input type="submit" value="Eliminar" name="Eliminar" />
-                                </form>
-                                <form action="actualizarUsuario.jsp">
-                                    <input type="hidden" name="accion" value="ActualizarUsuario" />
-                                    <input type="hidden" name="id" value="<%= b.getIdBancos() %>" />
-                                    <input type="submit" value="Actualizar" name="Actualizar" />
-                                </form>
+                                <a class="btn btn-info" role="button" href="actualizarbanco.jsp?id=<%= b.getIdBancos() %>">Actualizar</a>
+                                <a class="btn btn-danger" role="button" href="ControladorBancos?accion=EliminarBanco&id=<%= b.getIdBancos() %>">Eliminar</a>
                             </td>
                         </tr>
                         <%
@@ -65,6 +57,11 @@
                     </tbody>
                   </table>
             </div>
+            <div class="container-fluid">
+                <a class="btn btn-success" role="button" href="registrobanco.jsp">Ingresar Nuevo Banco</a>
+            </div>
+            <br>
+            <br>
         </main>
       </div>
     </div>

@@ -40,10 +40,10 @@ public class ADOHabitantes {
             cl.registerOutParameter(1, Types.INTEGER);
             //El siguiente parametro del procedimiento almacenado es el nombre
             cl.setString(2, hab.getCedula());
-            cl.setString(6, hab.getNombres());
-            cl.setString(7, hab.getApellidos());
-            cl.setString(8, hab.getFechaNacimiento());
-            cl.setInt(9, hab.getCasas().getIdCasas());
+            cl.setString(3, hab.getNombres());
+            cl.setString(4, hab.getApellidos());
+            cl.setString(5, hab.getFechaNacimiento());
+            cl.setInt(6, hab.getCasas().getIdCasas());
             
             //Ejecutamos la sentencia y si nos devuelve el valor de 1 es porque
             //registro de forma correcta los datos
@@ -109,6 +109,51 @@ public class ADOHabitantes {
                 ca.setNombreCalle(rs.getString("nombreCalle"));
                 c.setCalles(ca);
                 h.setCasas(c);
+                
+                //Lo adicionamos a nuestra lista
+                lista.add(h);
+            }
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (SQLException e) {
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (Exception e) {
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        }
+        return lista;
+    }
+    
+    public static synchronized ArrayList<Habitantes> obtenerHabitantesByCasa(int idCasa) {
+        //El array que contendra todos nuestros productos
+        ArrayList<Habitantes> lista = new ArrayList<>();
+        Connection cn = null;
+        CallableStatement cl = null;
+        ResultSet rs;
+        try {
+            //Nombre del procedimiento almacenado
+            String call = "{CALL obtenerHabitantesByCasa(?)}";
+            
+            cn = Conexion.getConexion();
+            cl = cn.prepareCall(call);
+            
+            cl.setInt(1, idCasa);
+            //La sentencia lo almacenamos en un resulset
+            rs = cl.executeQuery();
+            //cl.execute();
+            //rs = cl.getResultSet();
+            //Consultamos si hay datos para recorrerlo
+            //e insertarlo en nuestro array
+            while (rs.next()) {
+                Habitantes h = new Habitantes();
+              
+                h.setIdHabitante(rs.getInt("idHabitante"));
+                h.setCedula(rs.getString("cedula"));
+                h.setNombres(rs.getString("nombres"));
+                h.setApellidos(rs.getString("apellidos"));
+                h.setFechaNacimiento(rs.getString("fechaNacimiento"));
+                h.setEstatus(rs.getBoolean("estatus"));
                 
                 //Lo adicionamos a nuestra lista
                 lista.add(h);

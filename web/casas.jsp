@@ -18,47 +18,55 @@
     <div class="container-fluid">
       <div class="row">
               <%@include file ="menu.jsp" %>
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-              <h1 class="h2">Condominio El Cardenal</h1>
-            </div>
-            <div class="container-fluid">
-                <h1 class="h2">Lista de Casas</h1>
-                <table border="1">
-                    <tr>
-                        <td>ID Casa</td>
-                        <td>Nombre de Casa</td>
-                        <td colspan="2">Acciones</td>
-                    </tr>
-                    <%-- Lista de todos los Usuarios --%>
-                    <%
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                  <h1 class="h2">Condominio El Cardenal</h1>
+                </div>
+                <div class="container-fluid">
+                    <h1 class="h2">Lista de Casas</h1>
+
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">ID Casa</th>
+                                <th scope="col">Nombre de Casa</th>
+                                <th colspan="2">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <%-- Lista de todos los Modulos --%>
+                            <%
                                 ArrayList<Casas> lista = ADOCasas.obtenerCasas();
                                 for (Casas c : lista) {
-                    %>
-                    <tr>
-                        <td><%= c.getIdCasas() %></td>
-                        <td><%= c.getNombreCasa() %></td>
-                        <%-- Enlaces a las paginas de Actualizar o eliminar Usuario --%>
-                        <td>
-                            <form action="ControladorUsuarios">
-                                <input type="hidden" name="accion" value="EliminarUsuario" />
-                                <input type="hidden" name="id" value="<%= c.getIdCasas() %>" />
-                                <input type="submit" value="Eliminar" name="Eliminar" />
-                            </form>
-                            <form action="actualizarUsuario.jsp">
-                                <input type="hidden" name="accion" value="ActualizarUsuario" />
-                                <input type="hidden" name="id" value="<%= c.getIdCasas() %>" />
-                                <input type="submit" value="Actualizar" name="Actualizar" />
-                            </form>
-                        </td>
-                    </tr>
-                    <%
-                                }
-                    %>
-                </table>
-            </div> 
-            
-        </main>
+                            %>
+                            <tr>
+                                <td><%= c.getIdCasas() %></td>
+                                <td><%= c.getNombreCasa() %></td>
+                                <%-- Enlaces a las paginas de Actualizar o eliminar Modulo --%>
+                                <td>
+                                    <a class="btn btn-info" role="button" href="actualizarcasa.jsp?id=<%= c.getIdCasas() %>">Actualizar</a>
+                                    <a class="btn btn-danger" role="button" href="ControladorCasas?accion=EliminarCasa&id=<%= c.getIdCasas() %>">Eliminar</a>
+                                </td>
+                            </tr>
+                            <%
+                                        }
+                            %>
+                        </tbody>
+                      </table>
+                        <%
+                            String men = request.getParameter("men");
+                            if(men!= null){
+                                %>
+                                    <h1><%=men%></h1>
+                                <%
+                            }
+                        %>
+                </div>
+                <div class="container-fluid">
+                    <a class="btn btn-success" role="button" href="registrocasa.jsp">Ingresar Nueva Casa</a>
+                </div>
+            </main>   
       </div>
     </div>
   </body>

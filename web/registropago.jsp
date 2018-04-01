@@ -105,7 +105,7 @@
                     </select>
                     <br>
                     <br>
-                    <input type="submit" value="Registrar" name="Enviar" />
+                    <input class="btn btn-success" type="submit" value="Registrar" name="Enviar" />
                 </form>
                     <br>
                     <br>

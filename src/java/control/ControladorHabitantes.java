@@ -6,25 +6,19 @@
 package control;
 
 import db.ADOHabitantes;
-import db.ADOModulos;
-import db.ADOUsuarios;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import modelo.Casas;
 import modelo.Habitantes;
-import modelo.Modulos;
-import modelo.Usuarios;
 
 /**
  *
  * @author Edgar
  */
-public class LoginServlet extends HttpServlet {
+public class ControladorHabitantes extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,25 +32,24 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession sesion = request.getSession();
-
-        String nombre = request.getParameter("usuario");
-        String clave = request.getParameter("passw");
-        
-        boolean rpta = ADOUsuarios.loginUsuario(nombre, clave);
- 
-        if (rpta){
-            Usuarios usuario = ADOUsuarios.getUsuarioByNombre(nombre);
-            Habitantes hab = ADOHabitantes.obtenerHabitante(usuario.getIdUsuario());
-            ArrayList<Modulos> modulos = ADOModulos.obtenerModulosByPerfil(usuario.getIdPerfil());
-            sesion.setAttribute("modulos", modulos);
-            sesion.setAttribute("usuario", usuario);
-            sesion.setAttribute("habitante", hab);
-            response.sendRedirect("index.jsp");
-        }else{
-            //sesion.setAttribute("mensaje", "Datos incorrectos, confirme sus datos");
-            response.sendRedirect("login.jsp");
-        }
+        String accion = request.getParameter("accion");
+            
+            switch (accion) {
+                case "RegistroHabitante":
+                    this.registrarHabitante(request, response);
+                    break;
+                /*case "ActualizarUsuario":
+                    this.actualizarUsuario(request, response);
+                    break;
+                case "EliminarUsuario":
+                    this.eliminarUsuario(request, response);
+                    break;
+                /*case "RegistrarVenta":
+                    this.registrarVenta(request, response);
+                    break;*/
+                default:
+                    break;
+            }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -97,5 +90,29 @@ public class LoginServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void registrarHabitante(HttpServletRequest request, HttpServletResponse response) throws IOException {
+       
+        Habitantes actual = (Habitantes) request.getSession().getAttribute("habitante");
+        Casas casa = actual.getCasas();
+        
+        Habitantes hab = new Habitantes();
+        
+        hab.setCedula(request.getParameter("cedula"));
+        hab.setNombres(request.getParameter("nombres"));
+        hab.setApellidos(request.getParameter("apellidos"));
+        hab.setFechaNacimiento(request.getParameter("fechaNac"));
+        hab.setCasas(casa);
+        
+        boolean rpta;
+        rpta = ADOHabitantes.insertarHabitante(hab);
+        if (rpta) {
+            //Si inserto lo redireccionamos a otra pagina que se llama "result.jsp"
+            response.sendRedirect("micasa.jsp?men=Se registro el Habitante de manera correcta");
+        } else {
+            //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
+            response.sendRedirect("micasa.jsp?men=No se registro el Habitante");
+        }
+    }
 
 }

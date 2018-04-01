@@ -4,6 +4,7 @@
     Author     : Edgar
 --%>
 
+<%@page import="db.ADOUsuarios"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!doctype html>
@@ -21,30 +22,46 @@
             </div>
             <div class="container-fluid">
                 <h1>Registro de Usuario</h1>
+                <%
+                    Usuarios u = new Usuarios();
+                    u = ADOUsuarios.getUsuarioByID(Integer.parseInt(request.getParameter("id")));
+                %>
                 <form action="ControladorUsuarios" method="POST">
                     <input type="hidden" name="accion" value="ActualizarUsuario" />
-                    <label>Introduzca el Nombre de Usuario<label/>
+                    <input type="hidden" name="id" value="<%= u.getIdUsuario() %>" />
+                    <input type="hidden" name="clave" value="<%= u.getClave() %>" />
+                    <label>Introduzca el Nombre de Usuario</label>
                     <br>
-                    <input type="text" name="nombreUsuario" value="" size="15" />
+                    <input type="text" name="nombreUsuario" value=" <%= u.getNombreUsuario() %> " size="15" readonly />
                     <br>
-                    <label>Introduzca su Correo Electrónico<label/>
+                    <label>Introduzca su Correo Electrónico</label>
                     <br>
-                    <input type="text" name="email" value="" size="15" />
-                    <br>
-                    <label>Escriba su Contraseña Actual<label/>
+                    <input type="text" name="email" value=" <%= u.getEmail() %> " size="15" />
+                    <br>                    
+                    <label>Escriba su Contraseña Actual</label>
                     <br>
                     <input type="password" name="oldPass" value="" size="15" />
                     <br>
-                    <label>Escriba su Nueva Contraseña<label/>
+                    <label>Escriba su Nueva Contraseña</label>
                     <br>
                     <input type="password" name="newPass" value="" size="15" />
                     <br>
-                    <label>Repita su Nueva Contraseña<label/>
+                    <label>Repita su Nueva Contraseña</label>
                     <br>
-                    <input type="password" name="newPass" value="" size="15" />
+                    <input type="password" name="newPassConfir" value="" size="15" />
+                    <br>
                     <br>
                     <input type="submit" value="Registrar" name="Enviar" />
                 </form>
+                <%
+                    String men=request.getParameter("men");
+                    if(men!= null){
+                        %>
+                        <h1><%=men%></h1>
+                        <%
+                    }
+                %>
+                
             </div> 
             
         </main>

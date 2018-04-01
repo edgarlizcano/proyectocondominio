@@ -126,6 +126,58 @@ public class ADOPagos {
         return lista;
     }
     
+    public static synchronized ArrayList<CasasHasCuotas> obtenerPagosByHabitante(int id) {
+        //El array que contendra todos nuestros productos
+        ArrayList<CasasHasCuotas> lista = new ArrayList<>();
+        Connection cn = null;
+        CallableStatement cl = null;
+        ResultSet rs;
+        try {
+            //Nombre del procedimiento almacenado
+            String call = "{CALL obtenerPagosByHabitante(?)}";
+            
+            cn = Conexion.getConexion();
+            cl = cn.prepareCall(call);
+            cl.setInt(1, id);
+            //La sentencia lo almacenamos en un resulset
+            rs = cl.executeQuery();
+            //cl.execute();
+            //rs = cl.getResultSet();
+            //Consultamos si hay datos para recorrerlo
+            //e insertarlo en nuestro array
+            while (rs.next()) {
+                Pagos p = new Pagos();
+                Casas ca = new Casas();
+                Cuotas cu = new Cuotas();
+                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
+                //Obtenemos los valores de la consulta y creamos
+                //nuestro objeto producto
+                
+                p.setIdPagos(rs.getInt("idPagos"));
+                p.setMonto(rs.getFloat("monto"));
+                p.setFecha(rs.getString("fecha"));
+                
+                cu.setIdCuotas(rs.getInt("idCuotas"));
+                cu.setNombre(rs.getString("nombre"));
+                
+                ca.setIdCasas(rs.getInt("idCasa"));
+                ca.setNombreCasa(rs.getString("nombreCasa"));
+                
+                
+                //Lo adicionamos a nuestra lista
+                lista.add(cc);
+            }
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (SQLException e) {
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (Exception e) {
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        }
+        return lista;
+    }
     /*
     public static synchronized boolean actualizarUsuario(Usuarios user, String newPass) {
         Connection cn = null;

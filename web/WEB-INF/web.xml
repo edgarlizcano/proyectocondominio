@@ -28,6 +28,14 @@
         <servlet-name>ControladorCasas</servlet-name>
         <servlet-class>control.ControladorCasas</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControladorHabitantes</servlet-name>
+        <servlet-class>control.ControladorHabitantes</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ControlReportes</servlet-name>
+        <servlet-class>control.ControlReportes</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorUsuarios</servlet-name>
         <url-pattern>/ControladorUsuarios</url-pattern>
@@ -55,6 +63,14 @@
     <servlet-mapping>
         <servlet-name>ControladorCasas</servlet-name>
         <url-pattern>/ControladorCasas</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControladorHabitantes</servlet-name>
+        <url-pattern>/ControladorHabitantes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControlReportes</servlet-name>
+        <url-pattern>/ControlReportes</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
