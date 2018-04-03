@@ -45,10 +45,10 @@ public class ControladorPagos extends HttpServlet {
                 case "RegistroPago":
                     this.registrarPago(request, response);
                     break;
-                /*case "ObtenerPagosPorHabitante":
-                    this.obtenerPagosPorHabitante(request, response);
+                case "ConfirmarPago":
+                    this.confirmarPago(request, response);
                     break;
-                case "EliminarUsuario":
+                /*case "EliminarUsuario":
                     this.eliminarUsuario(request, response);
                     break;
                 case "RegistrarVenta":
@@ -63,7 +63,7 @@ public class ControladorPagos extends HttpServlet {
     }
     
     private void registrarPago(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
-        
+        response.setContentType("text/html;charset=UTF-8");
         Pagos pago = new Pagos();
         Cuotas cuota = new Cuotas();
         Casas casa = new Casas();
@@ -83,33 +83,28 @@ public class ControladorPagos extends HttpServlet {
         rpta = ADOPagos.insertarPago(pago, casa, cuota);
         if (rpta) {
             //Si inserto lo redireccionamos a otra pagina que se llama "result.jsp"
-            response.sendRedirect("result.jsp?men=Se registro el Pago de manera correcta");
+            response.sendRedirect("mispagos.jsp?men=Se registro el Pago de manera correcta");
         } else {
             //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
-            response.sendRedirect("result.jsp?men=No se registro el Pago");
+            response.sendRedirect("mispagos.jsp?men=No se registro el Pago");
         }
     }
     
-    private void actualizarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Usuarios user = new Usuarios();
-        
-        user.setIdUsuario(Integer.parseInt(request.getParameter("id")));
-        user.setNombreUsuario(request.getParameter("nombreUsuario"));
-        user.setEmail(request.getParameter("email"));
-        user.setClave(request.getParameter("clave"));
-        String newPass = request.getParameter("newPass");
+    private void confirmarPago(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        int id = Integer.parseInt(request.getParameter("id"));
         
         boolean rpta;
-        rpta = ADOUsuarios.actualizarUsuario(user, newPass);
+        rpta = ADOPagos.confirmarPago(id);
         if (rpta) {
             //Si inserto lo redireccionamos a otra pagina que se llama "result.jsp"
-            response.sendRedirect("result.jsp?men=Se actualizó el Usuario de manera correcta");
+            response.sendRedirect("pagos.jsp?men=Se confirmó el pago de manera correcta");
         } else {
             //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
-            response.sendRedirect("result.jsp?men=No se actualizó el Usuario");
+            response.sendRedirect("pagos.jsp?men=No se pudo confirmar el pago");
         }
     }
-    
+    /*
     private void eliminarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException{
         Usuarios user = new Usuarios();
         
@@ -124,7 +119,7 @@ public class ControladorPagos extends HttpServlet {
             //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
             response.sendRedirect("result.jsp?men=No se eliminó el Usuario");
         }
-    }
+    }*/
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

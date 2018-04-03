@@ -8,11 +8,11 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="modelo.CasasHasCuotas"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@include file="access.jsp" %>
 
 <!doctype html>
 <html lang="en">
   <%@include file="head.jsp" %>
-  <%@include file="access.jsp" %>
   <body>    
     <%@include file="nav.jsp" %>
     <div class="container-fluid">
@@ -30,6 +30,7 @@
                             <th scope="col">ID Pago</th>
                             <th scope="col">Fecha</th>
                             <th scope="col">Monto</th>
+                            <th scope="col">Estado del Pago</th>
                             <th scope="col">ID Cuota</th>
                             <th scope="col">Nombre Cuota</th>
                             <th scope="col">ID Casa</th>
@@ -47,6 +48,15 @@
                         <td><%= c.getPagos().getIdPagos() %></td>
                         <td><%= c.getPagos().getFecha() %></td>
                         <td><%= c.getPagos().getMonto() %></td>
+                        <td>
+                            <%
+                                if (c.getPagos().isEstatus()){
+                                    out.print("Confirmado");
+                                }else{
+                                    out.print("En Espera");
+                                }
+                            %>
+                        </td>
                         <td><%= c.getCuotas().getIdCuotas() %></td>
                         <td><%= c.getCuotas().getNombre() %></td>
                         <td><%= c.getCasas().getIdCasas() %></td>
@@ -57,13 +67,15 @@
                     %>
                     </tbody>
                 </table>
+                    <a class="btn btn-success" role="button" href="registropago.jsp">Ingresar Nuevo Pago</a>
+                    <form action="ControlReportes" method="POST">
+                        <input type="hidden" name="accion" value="ReportePagosPorCasa" />
+                        <input type="hidden" name="idHab" value="<%= h.getIdHabitante() %>" />
+                        <input class="btn btn-info" type="submit" value="Generar Reporte" />
+                    </form>
             </div>
                     
-                    <form action="ControladorPagos" method="POST">
-                        <input type="hidden" name="accion" value="ObtenerPagosPorHabitante" />
-                        <input type="hidden" name="idHab" value="<%= h.getIdHabitante() %>" />
-                        <input type="submit" value="Generar Reporte" />
-                    </form>
+                    
             
         </main>
       </div>

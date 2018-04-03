@@ -11,25 +11,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import modelo.Calles;
 import modelo.Casas;
-import modelo.CasasHasCuotas;
-import modelo.Cuotas;
-import modelo.Pagos;
+import modelo.Habitantes;
+import modelo.Visitantes;
 
 /**
  *
  * @author Edgar
  */
-public class ADOPagos {
+public class ADOVisitantes {
     //Metodo utilizado para insertar un Usuario a nuestra Base de datos
-    public static synchronized boolean insertarPago(Pagos p, Casas ca, Cuotas cu) {
+    public static synchronized boolean insertarVisitante(Visitantes visitante) {
         Connection cn = null;
         CallableStatement cl = null;
         boolean rpta = false;
         try {
             //Nombre del procedimiento almacenado y como espera tres parametros
             //le ponemos 3 interrogantes
-            String call = "{CALL agregarPago(?,?,?,?,?,?,?,?,?)}";
+            String call = "{CALL agregarVisitante(?,?,?,?)}";
             //Obtenemos la conexion
             cn = Conexion.getConexion();
             //Decimos que vamos a crear una transaccion
@@ -40,14 +40,9 @@ public class ADOPagos {
             //almacenado le decimos que es OUT y el del tipo Integer en Java
             cl.registerOutParameter(1, Types.INTEGER);
             //El siguiente parametro del procedimiento almacenado es el nombre
-            cl.setDouble(2, p.getMonto());
-            cl.setString(3, p.getFecha());
-            cl.setString(4, p.getCedulaDepositante());
-            cl.setString(5, p.getNombreApellido());
-            cl.setString(6, p.getReferencia());
-            cl.setInt(7, p.getBanco().getIdBancos());
-            cl.setInt(8, ca.getIdCasas());
-            cl.setInt(9, cu.getIdCuotas());
+            cl.setString(2, visitante.getCedula());
+            cl.setString(3, visitante.getNombre());
+            cl.setString(4, visitante.getApellido());
             
             //Ejecutamos la sentencia y si nos devuelve el valor de 1 es porque
             //registro de forma correcta los datos
@@ -74,15 +69,15 @@ public class ADOPagos {
     }
     //Metodo utilizado para actualizar un Usuarios a nuestra Base de datos
     
-    public static synchronized ArrayList<CasasHasCuotas> obtenerPagos() {
+    public static synchronized ArrayList<Visitantes> obtenerVisitantes() {
         //El array que contendra todos nuestros productos
-        ArrayList<CasasHasCuotas> lista = new ArrayList<>();
+        ArrayList<Visitantes> lista = new ArrayList<>();
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs;
         try {
             //Nombre del procedimiento almacenado
-            String call = "{CALL obtenerPagos()}";
+            String call = "{CALL obtenerVisitantes()}";
             
             cn = Conexion.getConexion();
             cl = cn.prepareCall(call);
@@ -93,27 +88,15 @@ public class ADOPagos {
             //Consultamos si hay datos para recorrerlo
             //e insertarlo en nuestro array
             while (rs.next()) {
-                Pagos p = new Pagos();
-                Casas ca = new Casas();
-                Cuotas cu = new Cuotas();
-                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
-                //Obtenemos los valores de la consulta y creamos
-                //nuestro objeto producto
-                
-                p.setIdPagos(rs.getInt("idPagos"));
-                p.setMonto(rs.getFloat("monto"));
-                p.setFecha(rs.getString("fecha"));
-                p.setEstatus(rs.getBoolean("estatus"));
-                
-                cu.setIdCuotas(rs.getInt("idCuotas"));
-                cu.setNombre(rs.getString("nombre"));
-                
-                ca.setIdCasas(rs.getInt("idCasa"));
-                ca.setNombreCasa(rs.getString("nombreCasa"));
-                
-                
+                Visitantes v = new Visitantes();
+                                
+                v.setIdVisitantes(rs.getInt("idVisitantes"));
+                v.setCedula(rs.getString("cedula"));
+                v.setNombre(rs.getString("nombre"));
+                v.setApellido(rs.getString("apellido"));
+               
                 //Lo adicionamos a nuestra lista
-                lista.add(cc);
+                lista.add(v);
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);
@@ -127,19 +110,20 @@ public class ADOPagos {
         return lista;
     }
     
-    public static synchronized ArrayList<CasasHasCuotas> obtenerPagosByHabitante(int id) {
+    public static synchronized ArrayList<Visitantes> obtenerVisitantesByCasa(int idCasa) {
         //El array que contendra todos nuestros productos
-        ArrayList<CasasHasCuotas> lista = new ArrayList<>();
+        ArrayList<Visitantes> lista = new ArrayList<>();
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs;
         try {
             //Nombre del procedimiento almacenado
-            String call = "{CALL obtenerPagosByHabitante(?)}";
+            String call = "{CALL obtenerVisitantesByCasa(?)}";
             
             cn = Conexion.getConexion();
             cl = cn.prepareCall(call);
-            cl.setInt(1, id);
+            
+            cl.setInt(1, idCasa);
             //La sentencia lo almacenamos en un resulset
             rs = cl.executeQuery();
             //cl.execute();
@@ -147,27 +131,15 @@ public class ADOPagos {
             //Consultamos si hay datos para recorrerlo
             //e insertarlo en nuestro array
             while (rs.next()) {
-                Pagos p = new Pagos();
-                Casas ca = new Casas();
-                Cuotas cu = new Cuotas();
-                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
-                //Obtenemos los valores de la consulta y creamos
-                //nuestro objeto producto
-                
-                p.setIdPagos(rs.getInt("idPagos"));
-                p.setMonto(rs.getFloat("monto"));
-                p.setFecha(rs.getString("fecha"));
-                p.setEstatus(rs.getBoolean("estatus"));
-                
-                cu.setIdCuotas(rs.getInt("idCuotas"));
-                cu.setNombre(rs.getString("nombre"));
-                
-                ca.setIdCasas(rs.getInt("idCasa"));
-                ca.setNombreCasa(rs.getString("nombreCasa"));
-                
-                
+                Visitantes v = new Visitantes();
+                                
+                v.setIdVisitantes(rs.getInt("idVisitante"));
+                v.setCedula(rs.getString("cedula"));
+                v.setNombre(rs.getString("nombres"));
+                v.setApellido(rs.getString("apellidos"));
+               
                 //Lo adicionamos a nuestra lista
-                lista.add(cc);
+                lista.add(v);
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);
@@ -181,23 +153,71 @@ public class ADOPagos {
         return lista;
     }
     
-    public static synchronized boolean confirmarPago(int id) {
+    public static synchronized Visitantes obtenerVisitante(int idVisitante) {
+        //El array que contendra todos nuestros productos
+        Visitantes v = new Visitantes ();
+        
+        Connection cn = null;
+        CallableStatement cl = null;
+        ResultSet rs;
+        try {
+            
+            //Nombre del procedimiento almacenado
+            String call = "{CALL obtenerVisitanteById(?)}";
+            cn = Conexion.getConexion();
+            cl = cn.prepareCall(call);
+            cl.setInt(1, idVisitante);
+            //La sentencia lo almacenamos en un resulset
+            rs = cl.executeQuery();
+            //cl.execute();
+            //rs = cl.getResultSet();
+            //Consultamos si hay datos para recorrerlo
+            //e insertarlo en nuestro array
+            while (rs.next()) {
+                                               
+                v.setIdVisitantes(rs.getInt("idVisitante"));
+                v.setCedula(rs.getString("cedula"));
+                v.setNombre(rs.getString("nombres"));
+                v.setApellido(rs.getString("apellidos"));
+            }
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (SQLException e) {
+            System.out.println("Error SQL: "+e.getMessage());
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (Exception e) {
+            System.out.println("Error general: "+e.getMessage());
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        }
+        return v;
+    }
+    
+    /*
+    public static synchronized boolean actualizarUsuario(Usuarios user, String newPass) {
         Connection cn = null;
         CallableStatement cl = null;
         boolean rpta = false;
         try {
             //Nombre del procedimiento almacenado y como espera tres parametros
             //le ponemos 3 interrogantes
-            String call = "{CALL confirmarPago(?)}";
+            String call = "{CALL actualizarUsuario(?,?,?)}";
             //Obtenemos la conexion
             cn = Conexion.getConexion();
             //Decimos que vamos a crear una transaccion
             cn.setAutoCommit(false);
             //Preparamos la sentecia
             cl = cn.prepareCall(call);
-            
-            cl.setInt(1, id);
-            
+            //El primer parametro del procedimiento almacenado es el codigo
+            cl.setInt(1, user.getIdUsuario());
+            //El siguiente parametro del procedimiento almacenado es el nombre
+            cl.setString(2, user.getEmail());
+            //Y por ultimo el precio
+            cl.setString(3, user.getClave());
+            cl.setString(4, newPass);
+            //Ejecutamos la sentencia y si nos devuelve el valor de 1 es porque
+            //registro de forma correcta los datos
             rpta = cl.executeUpdate() == 1;
             if (rpta) {
                 //Confirmamos la transaccion
@@ -220,7 +240,7 @@ public class ADOPagos {
         return rpta;
     }
     
-    /*public static synchronized boolean eliminarUsuario(Usuarios user) {
+    public static synchronized boolean eliminarUsuario(Usuarios user) {
         Connection cn = null;
         CallableStatement cl = null;
         boolean rpta = false;

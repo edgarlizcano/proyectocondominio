@@ -32,6 +32,9 @@ public class Pagos implements Serializable {
     @Basic(optional = false)
     @Column(name = "monto")
     private double monto;
+    
+    private boolean estatus;
+    
     @Basic(optional = false)
     @Column(name = "fecha")
     private String fecha;
@@ -60,6 +63,14 @@ public class Pagos implements Serializable {
         this.banco = bancosidBancos;
     }
 
+    public boolean isEstatus() {
+        return estatus;
+    }
+
+    public void setEstatus(boolean estatus) {
+        this.estatus = estatus;
+    }
+    
     public double getMonto() {
         return monto;
     }
