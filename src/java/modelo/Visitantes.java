@@ -44,8 +44,6 @@ public class Visitantes implements Serializable {
     @Basic(optional = false)
     @Column(name = "apellido")
     private String apellido;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "visitantes")
-    private List<AutorizacionesHasVisitantes> autorizacionesHasVisitantesList;
 
     public Visitantes() {
     }
@@ -91,14 +89,6 @@ public class Visitantes implements Serializable {
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
-    }
-
-    public List<AutorizacionesHasVisitantes> getAutorizacionesHasVisitantesList() {
-        return autorizacionesHasVisitantesList;
-    }
-
-    public void setAutorizacionesHasVisitantesList(List<AutorizacionesHasVisitantes> autorizacionesHasVisitantesList) {
-        this.autorizacionesHasVisitantesList = autorizacionesHasVisitantesList;
     }
 
     @Override

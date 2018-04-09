@@ -64,11 +64,8 @@ public class Usuarios implements Serializable {
     @Column(name = "estatus")
     private boolean estatus;
     
-    @ManyToMany(mappedBy = "usuariosList")
-    private List<Perfiles> perfilesList;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarios")
-    private List<Habitantes> habitantesList;
+    private Habitantes habitante;
 
     public Usuarios() {
     }
@@ -144,45 +141,11 @@ public class Usuarios implements Serializable {
         this.estatus = estatus;
     }
 
-    public List<Perfiles> getPerfilesList() {
-        return perfilesList;
+    public Habitantes getHabitante() {
+        return habitante;
     }
 
-    public void setPerfilesList(List<Perfiles> perfilesList) {
-        this.perfilesList = perfilesList;
-    }
-
-    public List<Habitantes> getHabitantesList() {
-        return habitantesList;
-    }
-
-    public void setHabitantesList(List<Habitantes> habitantesList) {
-        this.habitantesList = habitantesList;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (idUsuario != null ? idUsuario.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Usuarios)) {
-            return false;
-        }
-        Usuarios other = (Usuarios) object;
-        if ((this.idUsuario == null && other.idUsuario != null) || (this.idUsuario != null && !this.idUsuario.equals(other.idUsuario))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "modelo.Usuarios[ idUsuario=" + idUsuario + " ]";
-    }
-    
+    public void setHabitante(Habitantes h) {
+        this.habitante = h;
+    }   
 }

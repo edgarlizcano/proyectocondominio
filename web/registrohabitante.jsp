@@ -43,7 +43,18 @@
                     <br>
                     <input type="date" name="fechaNac" value=""/>
                     <br>
+                    
+                    <label>Introduzca su número de Teléfono Local</label>
                     <br>
+                    <input type="text" name="tlfLocal" value="" size="30" required/>
+                    <br>
+                    
+                    <label>Introduzca su número de Teléfono Celular</label>
+                    <br>
+                    <input type="text" name="tlfCelular" value="" size="30" required/>
+                    <br>
+                    <br>
+                    
                     <input type="submit" class="btn btn-success" value="Registrar" name="Enviar" />
                     <br>
                     <br>

@@ -75,7 +75,14 @@
                     </form>
             </div>
                     
-                    
+            <%
+                String men=request.getParameter("men");
+                if(men!= null){
+                    %>
+                        <h1><%=men%></h1>
+                    <%
+                }
+            %>        
             
         </main>
       </div>

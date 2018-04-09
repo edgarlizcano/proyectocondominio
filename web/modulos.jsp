@@ -31,6 +31,7 @@
                             <th scope="col">ID Módulo</th>
                             <th scope="col">Nombre de Módulo</th>
                             <th scope="col">URL de Módulo</th>
+                            <th scope="col">Visible</th>
                             <th colspan="2" scope="col">Acciones</th>
                         </tr>
                     </thead>
@@ -45,6 +46,14 @@
                             <td><%= m.getIdModulo() %></td>
                             <td><%= m.getNombreModulo() %></td>
                             <td><%= m.getUrlModulo() %></td>
+                            <td><%
+                                        if (m.isVisible()){
+                                            out.print("Visible");
+                                        }else{
+                                            out.print("No visible");
+                                        }
+                                %>
+                            </td>
                             <%-- Enlaces a las paginas de Actualizar o eliminar Modulo --%>
                             <td>
                                 <a class="btn btn-info" role="button" href="actualizarModulo.jsp?id=<%= m.getIdModulo() %>">Actualizar</a>
@@ -67,6 +76,7 @@
             </div>
             <div class="container-fluid">
                 <a class="btn btn-success" role="button" href="registromodulo.jsp">Ingresar Nuevo Módulo</a>
+                <a class="btn btn-success" role="button" href="asignarmodulos.jsp">Asignar Módulo</a>
             </div>
         </main>
       </div>

@@ -7,12 +7,7 @@ package control;
 
 import db.ADOUsuarios;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -79,6 +74,8 @@ public class ControladorUsuarios extends HttpServlet {
         hab.setNombres(request.getParameter("nombres"));
         hab.setApellidos(request.getParameter("apellidos"));
         hab.setFechaNacimiento(request.getParameter("fechaNac"));
+        hab.setTelefono(request.getParameter("tlfLocal"));
+        hab.setCelular(request.getParameter("tlfCelular"));
         hab.setCasas(casa);
         
         boolean rpta;

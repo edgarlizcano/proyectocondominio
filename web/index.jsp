@@ -22,6 +22,15 @@
             </div>
             <div class="container-fluid">
                 <h1 class="h2">Bienvenidos - Página Principal</h1>
+                <%
+                    String men = (String) request.getSession().getAttribute("men");
+                    if(men!= null){
+                        %>
+                            <h1><%=men%></h1>
+                        <%
+                        request.getSession().removeAttribute("men");
+                    }
+                %>
             </div> 
             
         </main>

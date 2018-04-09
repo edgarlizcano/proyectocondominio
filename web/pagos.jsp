@@ -30,10 +30,10 @@
                             <th scope="col">Fecha</th>
                             <th scope="col">Monto</th>
                             <th scope="col">Estado del Pago</th>
+                            <th scope="col">Banco</th>
                             <th scope="col">ID Cuota</th>
                             <th scope="col">Nombre Cuota</th>
                             <th scope="col">ID Casa</th>
-                            <th scope="col">Nombre Casa</th>
                             <th scope="col">Acción</th>
                         </tr>
                     </thead>
@@ -56,10 +56,10 @@
                                 }
                             %>
                         </td>
+                        <td><%= c.getPagos().getBanco().getNombreBanco() %></td>
                         <td><%= c.getCuotas().getIdCuotas() %></td>
                         <td><%= c.getCuotas().getNombre() %></td>
                         <td><%= c.getCasas().getIdCasas() %></td>
-                        <td><%= c.getCasas().getNombreCasa() %></td>
                         <td>
                             <%
                                 if (c.getPagos().isEstatus()){
@@ -79,11 +79,12 @@
                     </tbody>
                 </table>
                 <%
-                    String men = request.getParameter("men");
+                    String men = (String) request.getSession().getAttribute("men");
                     if(men!= null){
                         %>
                             <h1><%=men%></h1>
                         <%
+                        request.getSession().removeAttribute("men");
                     }
                 %>
             <div class="container-fluid">

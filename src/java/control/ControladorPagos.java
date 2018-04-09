@@ -82,7 +82,12 @@ public class ControladorPagos extends HttpServlet {
         boolean rpta;
         rpta = ADOPagos.insertarPago(pago, casa, cuota);
         if (rpta) {
-            //Si inserto lo redireccionamos a otra pagina que se llama "result.jsp"
+            //Enviando correo electrónico al usuario
+            String msg ="Usted ha registrado el pago Correctamente\n";
+            msg+="Referencia Nº: "+pago.getReferencia()+"\n";
+            msg+="Monto Nº: "+pago.getMonto()+"\n";
+            Gmail.sendMail("edgar_lizcano@hotmail.com", "Registro de Pago", msg);
+            
             response.sendRedirect("mispagos.jsp?men=Se registro el Pago de manera correcta");
         } else {
             //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
@@ -92,13 +97,23 @@ public class ControladorPagos extends HttpServlet {
     
     private void confirmarPago(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
+        Usuarios u = (Usuarios) request.getSession().getAttribute("usuario");
         int id = Integer.parseInt(request.getParameter("id"));
-        
         boolean rpta;
-        rpta = ADOPagos.confirmarPago(id);
+        rpta = ADOPagos.confirmarPago(id, u.getIdUsuario());
+        Pagos p = ADOPagos.obtenerPagoById(id);
         if (rpta) {
+            //Enviando correo electrónico al usuario
+            String msg ="Se ha confirmado su pago Correctamente\n";
+            msg+="Referencia Nº: "+p.getReferencia()+"\n";
+            msg+="Monto: "+p.getMonto()+"\n";
+            msg+="Fecha: "+p.getFecha()+"\n";
+            msg+="Banco: "+p.getBanco().getNombreBanco()+"\n";
+            msg+="Depositante: "+p.getNombreApellido()+" Cedula: "+p.getCedulaDepositante()+ "\n";
+            Gmail.sendMail(u.getEmail(), "Confirmación de Pago", msg);
             //Si inserto lo redireccionamos a otra pagina que se llama "result.jsp"
-            response.sendRedirect("pagos.jsp?men=Se confirmó el pago de manera correcta");
+            request.getSession().setAttribute("men", "Se confirmó el pago de manera correcta");
+            response.sendRedirect("pagos.jsp");
         } else {
             //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
             response.sendRedirect("pagos.jsp?men=No se pudo confirmar el pago");

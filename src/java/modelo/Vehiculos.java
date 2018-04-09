@@ -29,7 +29,7 @@ public class Vehiculos implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected VehiculosPK vehiculosPK;
+    private int idVehiculos;
     @Basic(optional = false)
     @Column(name = "modelo")
     private String modelo;
@@ -48,27 +48,24 @@ public class Vehiculos implements Serializable {
     public Vehiculos() {
     }
 
-    public Vehiculos(VehiculosPK vehiculosPK) {
-        this.vehiculosPK = vehiculosPK;
+    public Vehiculos(int idVehiculos) {
+        this.idVehiculos = idVehiculos;
     }
 
-    public Vehiculos(VehiculosPK vehiculosPK, String modelo, String marca, String placa) {
-        this.vehiculosPK = vehiculosPK;
+    public Vehiculos(int idVehiculos, String modelo, String marca, String placa) {
+        this.idVehiculos = idVehiculos;
         this.modelo = modelo;
         this.marca = marca;
         this.placa = placa;
     }
 
-    public Vehiculos(int idVehiculos, int habitantesidPersona, int habitantesCasasidCasa) {
-        this.vehiculosPK = new VehiculosPK(idVehiculos, habitantesidPersona, habitantesCasasidCasa);
+
+    public int getidVehiculos() {
+        return idVehiculos;
     }
 
-    public VehiculosPK getVehiculosPK() {
-        return vehiculosPK;
-    }
-
-    public void setVehiculosPK(VehiculosPK vehiculosPK) {
-        this.vehiculosPK = vehiculosPK;
+    public void setidVehiculos(int idVehiculos) {
+        this.idVehiculos = idVehiculos;
     }
 
     public String getModelo() {
@@ -101,31 +98,6 @@ public class Vehiculos implements Serializable {
 
     public void setHabitantes(Habitantes habitantes) {
         this.habitantes = habitantes;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (vehiculosPK != null ? vehiculosPK.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Vehiculos)) {
-            return false;
-        }
-        Vehiculos other = (Vehiculos) object;
-        if ((this.vehiculosPK == null && other.vehiculosPK != null) || (this.vehiculosPK != null && !this.vehiculosPK.equals(other.vehiculosPK))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "modelo.Vehiculos[ vehiculosPK=" + vehiculosPK + " ]";
     }
     
 }

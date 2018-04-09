@@ -26,7 +26,7 @@ public class ADOModulos {
         try {
             //Nombre del procedimiento almacenado y como espera tres parametros
             //le ponemos 3 interrogantes
-            String call = "{CALL agregarModulo(?,?,?)}";
+            String call = "{CALL agregarModulo(?,?,?,?)}";
             //Obtenemos la conexion
             cn = Conexion.getConexion();
             //Decimos que vamos a crear una transaccion
@@ -38,7 +38,9 @@ public class ADOModulos {
             cl.registerOutParameter(1, Types.INTEGER);
             //El siguiente parametro del procedimiento almacenado es el nombre
             cl.setString(2, m.getNombreModulo());
-            cl.setString(3, m.getNombreModulo()+"jsp");
+            cl.setString(3, m.getUrlModulo()+"jsp");
+            cl.setBoolean(4, m.isVisible());
+            
             
             //Ejecutamos la sentencia y si nos devuelve el valor de 1 es porque
             //registro de forma correcta los datos
@@ -90,6 +92,7 @@ public class ADOModulos {
                 m.setIdModulo(rs.getInt("idModulo"));
                 m.setNombreModulo(rs.getString("nombreModulo"));
                 m.setUrlModulo(rs.getString("urlModulo"));
+                m.setVisible(rs.getBoolean("visible"));
                 //Lo adicionamos a nuestra lista
                 lista.add(m);
             }
@@ -132,6 +135,7 @@ public class ADOModulos {
                 m.setIdModulo(rs.getInt("idModulo"));
                 m.setNombreModulo(rs.getString("nombreModulo"));
                 m.setUrlModulo(rs.getString("urlModulo"));
+                m.setVisible(rs.getBoolean("visible"));
                 //Lo adicionamos a nuestra lista
                 lista.add(m);
             }
@@ -145,6 +149,48 @@ public class ADOModulos {
             Conexion.cerrarConexion(cn);
         }
         return lista;
+    }
+    
+    public static boolean asignarModulo(int modulo, int perfil) {
+        Connection cn = null;
+        CallableStatement cl = null;
+        boolean rpta = false;
+        try {
+            //Nombre del procedimiento almacenado y como espera tres parametros
+            //le ponemos 3 interrogantes
+            String call = "{CALL asignarModulo(?,?)}";
+            //Obtenemos la conexion
+            cn = Conexion.getConexion();
+            //Decimos que vamos a crear una transaccion
+            cn.setAutoCommit(false);
+            //Preparamos la sentecia
+            cl = cn.prepareCall(call);
+            //El siguiente parametro del procedimiento almacenado es el nombre
+            cl.setInt(1, modulo);
+            cl.setInt(2, perfil);
+            
+            //Ejecutamos la sentencia y si nos devuelve el valor de 1 es porque
+            //registro de forma correcta los datos
+            rpta = cl.executeUpdate() == 1;
+            if (rpta) {
+                //Confirmamos la transaccion
+                cn.commit();
+            } else {
+                //Negamos la transaccion
+                Conexion.deshacerCambios(cn);
+            }
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (SQLException e) {
+            Conexion.deshacerCambios(cn);
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (Exception e) {
+            Conexion.deshacerCambios(cn);
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        }
+        return rpta;
     }
     
     /*
@@ -306,4 +352,6 @@ public class ADOModulos {
         return usuario;
     }
     */
+
+    
 }

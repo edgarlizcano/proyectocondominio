@@ -9,7 +9,6 @@ import db.ADOHabitantes;
 import db.ADOModulos;
 import db.ADOUsuarios;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -43,22 +42,19 @@ public class LoginServlet extends HttpServlet {
         String nombre = request.getParameter("usuario");
         String clave = request.getParameter("passw");
         
-        boolean rpta = ADOUsuarios.loginUsuario(nombre, clave);
- 
-        if (rpta){
-            Usuarios usuario = ADOUsuarios.getUsuarioByNombre(nombre);
-            Habitantes hab = ADOHabitantes.obtenerHabitante(usuario.getIdUsuario());
+        Usuarios usuario = ADOUsuarios.getUsuarioByNombre(nombre);
+        
+        if (usuario != null && usuario.getClave().equals(clave) && usuario.getNombreUsuario().equals(nombre)){
             ArrayList<Modulos> modulos = ADOModulos.obtenerModulosByPerfil(usuario.getIdPerfil());
             sesion.setAttribute("modulos", modulos);
             sesion.setAttribute("usuario", usuario);
-            sesion.setAttribute("habitante", hab);
+            sesion.setAttribute("habitante", usuario.getHabitante());
             response.sendRedirect("index.jsp");
         }else{
-            //sesion.setAttribute("mensaje", "Datos incorrectos, confirme sus datos");
+            request.getSession().setAttribute("men", "Usuario o Contraseña incorrecta, confirme sus datos");
             response.sendRedirect("login.jsp");
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

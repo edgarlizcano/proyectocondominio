@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import modelo.Bancos;
 import modelo.Casas;
 import modelo.CasasHasCuotas;
 import modelo.Cuotas;
@@ -96,14 +97,16 @@ public class ADOPagos {
                 Pagos p = new Pagos();
                 Casas ca = new Casas();
                 Cuotas cu = new Cuotas();
-                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
+                Bancos b = new Bancos();
+                
                 //Obtenemos los valores de la consulta y creamos
                 //nuestro objeto producto
-                
+                b.setNombreBanco(rs.getString("nombreBanco"));
                 p.setIdPagos(rs.getInt("idPagos"));
                 p.setMonto(rs.getFloat("monto"));
                 p.setFecha(rs.getString("fecha"));
                 p.setEstatus(rs.getBoolean("estatus"));
+                p.setBanco(b);
                 
                 cu.setIdCuotas(rs.getInt("idCuotas"));
                 cu.setNombre(rs.getString("nombre"));
@@ -111,7 +114,7 @@ public class ADOPagos {
                 ca.setIdCasas(rs.getInt("idCasa"));
                 ca.setNombreCasa(rs.getString("nombreCasa"));
                 
-                
+                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
                 //Lo adicionamos a nuestra lista
                 lista.add(cc);
             }
@@ -150,7 +153,7 @@ public class ADOPagos {
                 Pagos p = new Pagos();
                 Casas ca = new Casas();
                 Cuotas cu = new Cuotas();
-                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
+                
                 //Obtenemos los valores de la consulta y creamos
                 //nuestro objeto producto
                 
@@ -164,7 +167,7 @@ public class ADOPagos {
                 
                 ca.setIdCasas(rs.getInt("idCasa"));
                 ca.setNombreCasa(rs.getString("nombreCasa"));
-                
+                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
                 
                 //Lo adicionamos a nuestra lista
                 lista.add(cc);
@@ -181,14 +184,59 @@ public class ADOPagos {
         return lista;
     }
     
-    public static synchronized boolean confirmarPago(int id) {
+    public static synchronized Pagos obtenerPagoById(int idPago) {
+        Pagos p = new Pagos();
+        Bancos b = new Bancos();
+        Connection cn = null;
+        CallableStatement cl = null;
+        ResultSet rs;
+        try {
+            //Nombre del procedimiento almacenado
+            
+            String call = "{CALL obtenerPagoById(?)}";
+            
+            cn = Conexion.getConexion();
+            //Decimos que vamos a crear una transaccion
+            cn.setAutoCommit(false);
+            //Preparamos la sentecia
+            cl = cn.prepareCall(call);
+            cl.setInt(1, idPago);
+            //La sentencia lo almacenamos en un resulset
+            rs = cl.executeQuery();
+            
+            while (rs.next()) {
+                
+                p.setIdPagos(rs.getInt("idPagos"));
+                p.setMonto(rs.getFloat("monto"));
+                p.setFecha(rs.getString("fecha"));
+                p.setCedulaDepositante(rs.getString("cedulaDepositante"));
+                p.setNombreApellido(rs.getString("nombre_apellido"));
+                p.setReferencia(rs.getString("referencia"));
+                p.setEstatus(rs.getBoolean("estatus"));
+                b.setIdBancos(rs.getInt("idBancos"));
+                b.setNombreBanco(rs.getString("nombreBanco"));
+                p.setBanco(b);
+            }
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (SQLException e) {
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        } catch (Exception e) {
+            Conexion.cerrarCall(cl);
+            Conexion.cerrarConexion(cn);
+        }
+        return p;
+    }
+    
+    public static synchronized boolean confirmarPago(int id, int idUser) {
         Connection cn = null;
         CallableStatement cl = null;
         boolean rpta = false;
         try {
             //Nombre del procedimiento almacenado y como espera tres parametros
             //le ponemos 3 interrogantes
-            String call = "{CALL confirmarPago(?)}";
+            String call = "{CALL confirmarPago(?,?)}";
             //Obtenemos la conexion
             cn = Conexion.getConexion();
             //Decimos que vamos a crear una transaccion
@@ -197,6 +245,7 @@ public class ADOPagos {
             cl = cn.prepareCall(call);
             
             cl.setInt(1, id);
+            cl.setInt(2, idUser);
             
             rpta = cl.executeUpdate() == 1;
             if (rpta) {
@@ -220,117 +269,4 @@ public class ADOPagos {
         return rpta;
     }
     
-    /*public static synchronized boolean eliminarUsuario(Usuarios user) {
-        Connection cn = null;
-        CallableStatement cl = null;
-        boolean rpta = false;
-        try {
-            //Nombre del procedimiento almacenado y como espera tres parametros
-            //le ponemos 3 interrogantes
-            String call = "{CALL eliminarUsuario(?)}";
-            //Obtenemos la conexion
-            cn = Conexion.getConexion();
-            //Decimos que vamos a crear una transaccion
-            cn.setAutoCommit(false);
-            //Preparamos la sentecia
-            cl = cn.prepareCall(call);
-            //El primer parametro del procedimiento almacenado es el codigo
-            cl.setInt(1, user.getIdUsuario());
-            //Ejecutamos la sentencia y si nos devuelve el valor de 1 es porque
-            //registro de forma correcta los datos
-            rpta = cl.executeUpdate() == 1;
-            if (rpta) {
-                //Confirmamos la transaccion
-                cn.commit();
-            } else {
-                //Negamos la transaccion
-                Conexion.deshacerCambios(cn);
-            }
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        } catch (SQLException e) {
-            Conexion.deshacerCambios(cn);
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        } catch (Exception e) {
-            Conexion.deshacerCambios(cn);
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        }
-        return rpta;
-    }
-   
-    //Metodo utilizado para obtener un producto específico de nuestra base de datos
-    public static synchronized Usuarios getUsuarioByNombre(String nombre) {
-        Usuarios usuario = new Usuarios();
-        Connection cn = null;
-        CallableStatement cl = null;
-        ResultSet rs = null;
-        try {
-            //Nombre del procedimiento almacenado
-            String call = "{CALL obtenerUsuarioByNombre(?)}";
-            cn = Conexion.getConexion();
-            cl = cn.prepareCall(call);
-            cl.setString(1, nombre);
-            //La sentencia lo almacenamos en un resulset
-            rs = cl.executeQuery();
-            //Consultamos si hay datos para recorrerlo
-            //e insertarlo en nuestro array
-            while (rs.next()) {
-                //Obtenemos los valores de la consulta y creamos
-                //nuestro objeto usuario
-                usuario.setIdUsuario(rs.getInt("idUsuario"));
-                usuario.setNombreUsuario(rs.getString("nombreUsuario"));
-                usuario.setEmail(rs.getString("email"));
-                usuario.setUltimaConexion(rs.getDate("ultimaConexion"));
-                usuario.setEstatus(rs.getBoolean("estatus"));
-            }
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        } catch (SQLException e) {
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        } catch (Exception e) {
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        }
-        return usuario;
-    }
-    
-    public static synchronized Usuarios getUsuarioByID(int id) {
-        Usuarios usuario = new Usuarios();
-        Connection cn = null;
-        CallableStatement cl = null;
-        ResultSet rs = null;
-        try {
-            //Nombre del procedimiento almacenado
-            String call = "{CALL obtenerUsuarioById(?)}";
-            cn = Conexion.getConexion();
-            cl = cn.prepareCall(call);
-            cl.setInt(1, id);
-            //La sentencia lo almacenamos en un resulset
-            rs = cl.executeQuery();
-            //Consultamos si hay datos para recorrerlo
-            //e insertarlo en nuestro array
-            while (rs.next()) {
-                //Obtenemos los valores de la consulta y creamos
-                //nuestro objeto usuario
-                usuario.setIdUsuario(rs.getInt("idUsuario"));
-                usuario.setNombreUsuario(rs.getString("nombreUsuario"));
-                usuario.setEmail(rs.getString("email"));
-                usuario.setUltimaConexion(rs.getDate("ultimaConexion"));
-                usuario.setEstatus(rs.getBoolean("estatus"));
-            }
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        } catch (SQLException e) {
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        } catch (Exception e) {
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        }
-        return usuario;
-    }
-    */
 }

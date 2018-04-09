@@ -5,20 +5,19 @@
  */
 package control;
 
-import db.ADOHabitantes;
+import db.ADOModulos;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modelo.Casas;
-import modelo.Habitantes;
+import modelo.Modulos;
 
 /**
  *
  * @author Edgar
  */
-public class ControladorHabitantes extends HttpServlet {
+public class ControladorModulos extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,23 +32,22 @@ public class ControladorHabitantes extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String accion = request.getParameter("accion");
-            
-            switch (accion) {
-                case "RegistroHabitante":
-                    this.registrarHabitante(request, response);
-                    break;
-                /*case "ActualizarUsuario":
-                    this.actualizarUsuario(request, response);
-                    break;
-                case "EliminarUsuario":
-                    this.eliminarUsuario(request, response);
-                    break;
-                /*case "RegistrarVenta":
-                    this.registrarVenta(request, response);
-                    break;*/
-                default:
-                    break;
-            }
+        switch (accion) {
+            case "RegistroModulo":
+                this.registrarModulo(request, response);
+                break;
+            case "AsignaModulo":
+                this.asignarModulo(request, response);
+                break;
+            /*case "AnadirCarrito":
+                this.añadirCarrito(request, response);
+                break;
+            case "RegistrarVenta":
+                this.registrarVenta(request, response);
+                break;*/
+            default:
+                break;
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -91,29 +89,41 @@ public class ControladorHabitantes extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void registrarHabitante(HttpServletRequest request, HttpServletResponse response) throws IOException {
-       
-        Habitantes actual = (Habitantes) request.getSession().getAttribute("habitante");
-        Casas casa = actual.getCasas();
+    private void registrarModulo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Modulos modulo = new Modulos();
         
-        Habitantes hab = new Habitantes();
+        modulo.setNombreModulo(request.getParameter("nombreModulo"));
+        modulo.setUrlModulo(request.getParameter("urlModulo"));
+        modulo.setVisible(false);
         
-        hab.setCedula(request.getParameter("cedula"));
-        hab.setNombres(request.getParameter("nombres"));
-        hab.setApellidos(request.getParameter("apellidos"));
-        hab.setFechaNacimiento(request.getParameter("fechaNac"));
-        hab.setTelefono(request.getParameter("tlfLocal"));
-        hab.setCelular(request.getParameter("tlfCelular"));
-        hab.setCasas(casa);
+        if (request.getParameter("visible") != null){
+            modulo.setVisible(true);
+        }
         
         boolean rpta;
-        rpta = ADOHabitantes.insertarHabitante(hab);
+        
+        rpta = ADOModulos.insertarModulo(modulo);
         if (rpta) {
             //Si inserto lo redireccionamos a otra pagina que se llama "result.jsp"
-            response.sendRedirect("micasa.jsp?men=Se registro el Habitante de manera correcta");
+            response.sendRedirect("modulos.jsp?men=Se registro el Módulo de manera correcta");
         } else {
             //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
-            response.sendRedirect("micasa.jsp?men=No se registro el Habitante");
+            response.sendRedirect("modulos.jsp?men=No se registro el Módulo");
+        }
+    }
+
+    private void asignarModulo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int modulo = Integer.parseInt(request.getParameter("modulo"));
+        int perfil = Integer.parseInt(request.getParameter("perfil"));
+        boolean rpta;
+        
+        rpta = ADOModulos.asignarModulo(modulo, perfil);
+        if (rpta) {
+            //Si inserto lo redireccionamos a otra pagina que se llama "result.jsp"
+            response.sendRedirect("asignarmodulos.jsp?men=Se registro el Módulo de manera correcta");
+        } else {
+            //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
+            response.sendRedirect("asignarmodulos.jsp?men=No se registro el Módulo");
         }
     }
 

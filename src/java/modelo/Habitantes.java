@@ -53,6 +53,14 @@ public class Habitantes implements Serializable {
     private String apellidos;
     
     @Basic(optional = false)
+    @Column(name = "telefono")
+    private String telefono;
+    
+    @Basic(optional = false)
+    @Column(name = "celular")
+    private String celular;
+    
+    @Basic(optional = false)
     @Column(name = "fechaNacimiento")
     private String fechaNacimiento;
     
@@ -66,9 +74,6 @@ public class Habitantes implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "habitantes")
     private List<Vehiculos> vehiculosList;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "habitantes")
-    private List<Autorizaciones> autorizacionesList;
     
     private boolean estatus;
 
@@ -100,8 +105,22 @@ public class Habitantes implements Serializable {
         this.estatus = estatus;
     }
     
-    
+    public String getTelefono() {
+        return telefono;
+    }
 
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+    
     public String getCedula() {
         return cedula;
     }
@@ -156,13 +175,5 @@ public class Habitantes implements Serializable {
 
     public void setVehiculosList(List<Vehiculos> vehiculosList) {
         this.vehiculosList = vehiculosList;
-    }
-
-    public List<Autorizaciones> getAutorizacionesList() {
-        return autorizacionesList;
-    }
-
-    public void setAutorizacionesList(List<Autorizaciones> autorizacionesList) {
-        this.autorizacionesList = autorizacionesList;
     }
 }

@@ -26,6 +26,15 @@
                     <p><a href="#">Olvido su clave?</a></p>
                     <input type="submit" value="Entrar" name="Enviar" />
                 </form>
+                <%
+                    String men = (String) request.getSession().getAttribute("men");
+                    if(men!= null){
+                        %>
+                            <h1><%=men%></h1>
+                        <%
+                        request.getSession().removeAttribute("men");
+                    }
+                %>
             </div> 
         </main>
       </div>

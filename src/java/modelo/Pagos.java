@@ -115,8 +115,8 @@ public class Pagos implements Serializable {
         return banco;
     }
 
-    public void setBanco(Bancos bancosidBancos) {
-        this.banco = bancosidBancos;
+    public void setBanco(Bancos banco) {
+        this.banco = banco;
     }
 
     public int getIdPagos() {

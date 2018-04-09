@@ -28,7 +28,7 @@ public class ADOHabitantes {
         try {
             //Nombre del procedimiento almacenado y como espera tres parametros
             //le ponemos 3 interrogantes
-            String call = "{CALL agregarHabitante(?,?,?,?,?,?)}";
+            String call = "{CALL agregarHabitante(?,?,?,?,?,?,?,?)}";
             //Obtenemos la conexion
             cn = Conexion.getConexion();
             //Decimos que vamos a crear una transaccion
@@ -43,7 +43,9 @@ public class ADOHabitantes {
             cl.setString(3, hab.getNombres());
             cl.setString(4, hab.getApellidos());
             cl.setString(5, hab.getFechaNacimiento());
-            cl.setInt(6, hab.getCasas().getIdCasas());
+            cl.setString(6, hab.getTelefono());
+            cl.setString(7, hab.getCelular());
+            cl.setInt(8, hab.getCasas().getIdCasas());
             
             //Ejecutamos la sentencia y si nos devuelve el valor de 1 es porque
             //registro de forma correcta los datos
@@ -101,6 +103,8 @@ public class ADOHabitantes {
                 h.setApellidos(rs.getString("apellidos"));
                 h.setFechaNacimiento(rs.getString("fechaNacimiento"));
                 h.setEstatus(rs.getBoolean("estatus"));
+                h.setTelefono(rs.getString("telefono"));
+                h.setCelular(rs.getString("celular"));
                 
                 c.setIdCasas(rs.getInt("idCasa"));
                 c.setNombreCasa("nombreCasa");
@@ -154,6 +158,8 @@ public class ADOHabitantes {
                 h.setApellidos(rs.getString("apellidos"));
                 h.setFechaNacimiento(rs.getString("fechaNacimiento"));
                 h.setEstatus(rs.getBoolean("estatus"));
+                h.setTelefono(rs.getString("telefono"));
+                h.setCelular(rs.getString("celular"));
                 
                 //Lo adicionamos a nuestra lista
                 lista.add(h);
@@ -199,6 +205,8 @@ public class ADOHabitantes {
                 h.setApellidos(rs.getString("apellidos"));
                 h.setFechaNacimiento(rs.getString("fechaNacimiento"));
                 h.setEstatus(rs.getBoolean("estatus"));
+                h.setTelefono(rs.getString("telefono"));
+                h.setCelular(rs.getString("celular"));
                 
                 c.setIdCasas(rs.getInt("idCasa"));
                 c.setNombreCasa(rs.getString("nombreCasa"));

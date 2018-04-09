@@ -36,12 +36,22 @@ public class Modulos implements Serializable {
     private String nombreModulo;
     @Column(name = "urlModulo")
     private String urlModulo;
-
+    @Column(name = "visible")
+    private boolean visible;
+    
     public Modulos() {
     }
 
     public Modulos(Integer idModulo) {
         this.idModulo = idModulo;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     public Integer getIdModulo() {

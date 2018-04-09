@@ -21,7 +21,7 @@
             </div>
             <div class="container-fluid">
                 <h1>Registro de Módulo</h1>
-                <form action="ControladorBancos" method="POST">
+                <form action="ControladorModulos" method="POST">
                     <input type="hidden" name="accion" value="RegistroModulo" />
                     <label>Introduzca el Nombre del Módulo</label>
                     <br>
@@ -30,6 +30,12 @@
                     <label>Introduzca la URL del Módulo</label>
                     <br>
                     <input type="text" name="urlModulo" value="" size="100" />
+                    <br>
+                    <br>
+                    <label>Chequear para hacer visible este link?</label>
+                    
+                    <input type="checkbox" name="visible" value="ON" />
+                    
                     <br>
                     <br>
                     <input class="btn btn-success" type="submit" value="Registrar" name="Enviar" />

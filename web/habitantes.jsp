@@ -28,14 +28,13 @@
                         <table class="table">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col">ID Habitante</th>
                                     <th scope="col">Cédula</th>
                                     <th scope="col">Nombres</th>
                                     <th scope="col">Apellidos</th>
                                     <th scope="col">Fecha de Nacimiento</th>
+                                    <th scope="col">Teléfono</th>
+                                    <th scope="col">Celular</th>
                                     <th scope="col">ID Casa</th>
-                                    <th scope="col">Nombre Casa</th>
-                                    <th scope="col">ID Calle</th>
                                     <th scope="col">Nombre Calle</th>
                                     <th scope="col">Estatus</th>
                                     <th scope="col" colspan="2">Acciones</th>
@@ -49,14 +48,13 @@
                                     for (Habitantes h : lista) {
                                 %>
                                 <tr>
-                                    <td><%= h.getIdHabitante() %></td>
                                     <td><%= h.getCedula() %></td>
                                     <td><%= h.getNombres() %></td>
                                     <td><%= h.getApellidos() %></td>
                                     <td><%= h.getFechaNacimiento() %></td>
+                                    <td><%= h.getTelefono() %></td>
+                                    <td><%= h.getCelular() %></td>
                                     <td><%= h.getCasas().getIdCasas() %></td>
-                                    <td><%= h.getCasas().getNombreCasa() %></td>
-                                    <td><%= h.getCasas().getCalles().getIdCalles() %></td>
                                     <td><%= h.getCasas().getCalles().getNombreCalle()%></td>
                                     <%-- Muestra Activo o Inactivo según estado del Usuario --%>
                                     <td><%

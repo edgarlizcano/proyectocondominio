@@ -40,6 +40,10 @@
         <servlet-name>ControladorVisitantes</servlet-name>
         <servlet-class>control.ControladorVisitantes</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControladorModulos</servlet-name>
+        <servlet-class>control.ControladorModulos</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorUsuarios</servlet-name>
         <url-pattern>/ControladorUsuarios</url-pattern>
@@ -79,6 +83,10 @@
     <servlet-mapping>
         <servlet-name>ControladorVisitantes</servlet-name>
         <url-pattern>/ControladorVisitantes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControladorModulos</servlet-name>
+        <url-pattern>/ControladorModulos</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

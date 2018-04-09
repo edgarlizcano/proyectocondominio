@@ -7,11 +7,12 @@ package db;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import modelo.Calles;
+import modelo.Casas;
 import modelo.Habitantes;
 import modelo.Usuarios;
 
@@ -28,7 +29,7 @@ public class ADOUsuarios {
         try {
             //Nombre del procedimiento almacenado y como espera tres parametros
             //le ponemos 3 interrogantes
-            String call = "{CALL agregarUsuario(?,?,?,?,?,?,?,?,?)}";
+            String call = "{CALL agregarUsuario(?,?,?,?,?,?,?,?,?,?,?)}";
             //Obtenemos la conexion
             cn = Conexion.getConexion();
             //Decimos que vamos a crear una transaccion
@@ -46,7 +47,9 @@ public class ADOUsuarios {
             cl.setString(6, hab.getNombres());
             cl.setString(7, hab.getApellidos());
             cl.setString(8, hab.getFechaNacimiento());
-            cl.setInt(9, hab.getCasas().getIdCasas());
+            cl.setString(9, hab.getTelefono());
+            cl.setString(10, hab.getCelular());
+            cl.setInt(11, hab.getCasas().getIdCasas());
             
             //Ejecutamos la sentencia y si nos devuelve el valor de 1 es porque
             //registro de forma correcta los datos
@@ -199,7 +202,10 @@ public class ADOUsuarios {
     }
     //Metodo utilizado para obtener un producto específico de nuestra base de datos
     public static synchronized Usuarios getUsuarioByNombre(String nombre) {
-        Usuarios usuario = new Usuarios();
+        Usuarios usuario = null;
+        Habitantes habitante = null;
+        Casas casa = null;
+        Calles calle = null;
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs = null;
@@ -215,6 +221,11 @@ public class ADOUsuarios {
             //e insertarlo en nuestro array
             while (rs.next()) {
                 
+                usuario = new Usuarios();
+                habitante = new Habitantes();
+                casa = new Casas();
+                calle = new Calles();
+                
                 usuario.setIdUsuario(rs.getInt("idUsuario"));
                 usuario.setNombreUsuario(rs.getString("nombreUsuario"));
                 usuario.setEmail(rs.getString("email"));
@@ -222,6 +233,26 @@ public class ADOUsuarios {
                 usuario.setUltimaConexion(rs.getDate("ultimaConexion"));
                 usuario.setEstatus(rs.getBoolean("estatus"));
                 usuario.setIdPerfil(rs.getInt("Perfiles_idPerfil"));
+                
+                habitante.setIdHabitante(rs.getInt("Habitantes_idHabitante"));
+                habitante.setCedula(rs.getString("cedula"));
+                habitante.setNombres(rs.getString("nombres"));
+                habitante.setApellidos(rs.getString("apellidos"));
+                habitante.setFechaNacimiento(rs.getString("fechaNacimiento"));
+                habitante.setTelefono(rs.getString("telefono"));
+                habitante.setCelular(rs.getString("celular"));
+                habitante.setEstatus(rs.getBoolean("estatus"));
+                
+                casa.setIdCasas(rs.getInt("idCasa"));
+                casa.setNombreCasa(rs.getString("nombreCasa"));
+                
+                calle.setIdCalles(rs.getInt("idCalles"));
+                calle.setNombreCalle(rs.getString("nombreCalle"));
+                
+                casa.setCalles(calle);
+                habitante.setCasas(casa);
+                usuario.setHabitante(habitante);
+                
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);
@@ -272,48 +303,5 @@ public class ADOUsuarios {
         }
         return usuario;
     }
-    
-    public static synchronized boolean loginUsuario(String nombre, String clave) {
-        Usuarios usuario = new Usuarios();
-        Connection cn = null;
-        CallableStatement cl = null;
-        ResultSet rs = null;
-        boolean rpta = false;
-        try {
-            //Nombre del procedimiento almacenado
-            String call = "{CALL obtenerUsuarioByNombre(?)}";
-            cn = Conexion.getConexion();
-            cl = cn.prepareCall(call);
-            cl.setString(1, nombre);
-            //La sentencia lo almacenamos en un resulset
-            rs = cl.executeQuery();
-            //Consultamos si hay datos para recorrerlo
-            //e insertarlo en nuestro array
-            while (rs.next()) {
-                
-                usuario.setIdUsuario(rs.getInt("idUsuario"));
-                usuario.setNombreUsuario(rs.getString("nombreUsuario"));
-                usuario.setEmail(rs.getString("email"));
-                usuario.setClave(rs.getString("clave"));
-                usuario.setUltimaConexion(rs.getDate("ultimaConexion"));
-                usuario.setEstatus(rs.getBoolean("estatus"));
-                usuario.setIdPerfil(rs.getInt("Perfiles_idPerfil"));
- 
-            }
-            
-            if (usuario.getClave().equals(clave) && usuario.getNombreUsuario().equals(nombre)){
-                rpta = true;
-            }
-           
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        } catch (SQLException e) {
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        } catch (Exception e) {
-            Conexion.cerrarCall(cl);
-            Conexion.cerrarConexion(cn);
-        }
-        return rpta;
-    }
+   
 }

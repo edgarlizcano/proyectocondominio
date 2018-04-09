@@ -29,38 +29,48 @@
                     <br>
                     <label>Introduzca el Nombre de Usuario</label>
                     <br>
-                    <input type="text" name="nombreUsuario" value="" size="30" />
+                    <input type="text" name="nombreUsuario" value="" size="30" required/>
                     <br>
                     <label>Introduzca su Correo Electrónico</label>
                     <br>
-                    <input type="text" name="email" value="" size="30" />
+                    <input type="text" name="email" value="" size="30" required/>
                     <br>
                     <label>Introduzca su Número de Cédula</label>
                     <br>
-                    <input type="text" name="cedula" value="" size="30" />
+                    <input type="text" name="cedula" value="" size="30" required/>
                     <br>
                     
                     <label>Introduzca Nombres</label>
                     <br>
-                    <input type="text" name="nombres" value="" size="30" />
+                    <input type="text" name="nombres" value="" size="30" required/>
                     <br>
                     
                     <label>Introduzca Apellidos</label>
                     <br>
-                    <input type="text" name="apellidos" value="" size="30" />
+                    <input type="text" name="apellidos" value="" size="30" required/>
+                    <br>
+                    
+                    <label>Introduzca su número de Teléfono Local</label>
+                    <br>
+                    <input type="text" name="tlfLocal" value="" size="30" required/>
+                    <br>
+                    
+                    <label>Introduzca su número de Teléfono Celular</label>
+                    <br>
+                    <input type="text" name="tlfCelular" value="" size="30" required/>
                     <br>
                     
                     <label>Introduzca su Fecha de Nacimiento</label>
                     <br>
-                    <input type="date" name="fechaNac" value=""/>
+                    <input type="date" name="fechaNac" value="" required/>
                     <br>
                     <label>Introduzca su Contraseña</label>
                     <br>
-                    <input type="password" name="clave" value="" size="15" />
+                    <input type="password" name="clave" value="" size="15" required/>
                     <br>
                     <label>Repita su Contraseña</label>
                     <br>
-                    <input type="password" name="clave" value="" size="15" />
+                    <input type="password" name="clave" value="" size="15" required/>
                     <br>
                     <label>Seleccione el Número de Casa</label>
                     <br>
