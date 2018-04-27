@@ -22,34 +22,26 @@ import modelo.Usuarios;
  *
  * @author Edgar
  */
-public class ADOPagos {
+public class ADOCasasHasCuotas {
     //Metodo utilizado para insertar un Usuario a nuestra Base de datos
-    public static synchronized boolean insertarPago(Pagos p, Casas ca, Cuotas cu) {
+    public static synchronized boolean pagarCuota(int idCasa, int idCuota, int idCuenta) {
         Connection cn = null;
         CallableStatement cl = null;
         boolean rpta = false;
         try {
             //Nombre del procedimiento almacenado y como espera tres parametros
             //le ponemos 3 interrogantes
-            String call = "{CALL agregarPago(?,?,?,?,?,?,?,?,?)}";
+            String call = "{CALL pagoCuota(?,?,?)}";
             //Obtenemos la conexion
             cn = Conexion.getConexion();
             //Decimos que vamos a crear una transaccion
             cn.setAutoCommit(false);
             //Preparamos la sentecia
             cl = cn.prepareCall(call);
-            //Como el codigo se autogenera y es del tipo OUT en el procedimiento
-            //almacenado le decimos que es OUT y el del tipo Integer en Java
-            cl.registerOutParameter(1, Types.INTEGER);
-            //El siguiente parametro del procedimiento almacenado es el nombre
-            cl.setDouble(2, p.getMonto());
-            cl.setString(3, p.getFecha());
-            cl.setString(4, p.getCedulaDepositante());
-            cl.setString(5, p.getNombreApellido());
-            cl.setString(6, p.getReferencia());
-            cl.setInt(7, p.getBanco().getIdBancos());
-            cl.setInt(8, ca.getIdCasas());
-            cl.setInt(9, cu.getIdCuotas());
+            
+            cl.setInt(1, idCasa);
+            cl.setInt(2, idCuota);
+            cl.setInt(3, idCuenta);
             
             //Ejecutamos la sentencia y si nos devuelve el valor de 1 es porque
             //registro de forma correcta los datos
@@ -76,7 +68,7 @@ public class ADOPagos {
     }
     //Metodo utilizado para actualizar un Usuarios a nuestra Base de datos
     
-    public static synchronized ArrayList<CasasHasCuotas> obtenerPagos() {
+    public static synchronized ArrayList<CasasHasCuotas> obtenerCuotasPendientes() {
         //El array que contendra todos nuestros productos
         ArrayList<CasasHasCuotas> lista = new ArrayList<>();
         Connection cn = null;
@@ -84,7 +76,7 @@ public class ADOPagos {
         ResultSet rs;
         try {
             //Nombre del procedimiento almacenado
-            String call = "{CALL obtenerPagos()}";
+            String call = "{CALL obtenerCuotasPendientes()}";
             
             cn = Conexion.getConexion();
             cl = cn.prepareCall(call);

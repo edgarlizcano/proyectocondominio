@@ -35,6 +35,7 @@
                             <th scope="col">Nombre Cuota</th>
                             <th scope="col">ID Casa</th>
                             <th scope="col">Nombre Casa</th>
+                            <th scope="col">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -61,6 +62,13 @@
                         <td><%= c.getCuotas().getNombre() %></td>
                         <td><%= c.getCasas().getIdCasas() %></td>
                         <td><%= c.getCasas().getNombreCasa() %></td>
+                        <td>
+                            <form action="ControlReportes" method="POST">
+                                <input type="hidden" name="gridRadios" value="reciboPago" />
+                                <input type="hidden" name="idPago" value="<%= c.getPagos().getIdPagos() %>" class="btn btn-success"/>
+                                <input type="submit" value="Recibo" />
+                            </form>
+                        </td>
                     </tr>
                     <%
                                 }
@@ -68,11 +76,7 @@
                     </tbody>
                 </table>
                     <a class="btn btn-success" role="button" href="registropago.jsp">Ingresar Nuevo Pago</a>
-                    <form action="ControlReportes" method="POST">
-                        <input type="hidden" name="accion" value="ReportePagosPorCasa" />
-                        <input type="hidden" name="idHab" value="<%= h.getIdHabitante() %>" />
-                        <input class="btn btn-info" type="submit" value="Generar Reporte" />
-                    </form>
+                   
             </div>
                     
             <%

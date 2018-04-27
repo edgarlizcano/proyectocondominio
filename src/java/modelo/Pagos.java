@@ -49,6 +49,8 @@ public class Pagos implements Serializable {
     @JoinColumn(name = "banco", referencedColumnName = "idBancos")
     @ManyToOne(optional = false)
     private Bancos banco;
+    
+    private Usuarios usuario;
 
     public Pagos() {
     }
@@ -69,6 +71,14 @@ public class Pagos implements Serializable {
 
     public void setEstatus(boolean estatus) {
         this.estatus = estatus;
+    }
+
+    public Usuarios getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuarios usuario) {
+        this.usuario = usuario;
     }
     
     public double getMonto() {

@@ -5,16 +5,31 @@
  */
 package control;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Edgar
  */
 public class test {
     public static void main(String[] args) {
-        if(Gmail.sendMail("edgar_lizcano@hotmail.com", "Prueba", "Saludos mano")){
-            System.out.println("Enviado mail correctamente");
-        }else{
-            System.out.println("Error enviando");
+        try {
+            String inicio = "2018-04-15";
+            Date d = new SimpleDateFormat("yyyy-MM-dd").parse(inicio);
+            String fecha = new SimpleDateFormat("dd-MM-yyyy").format(d);
+            
+            
+            System.out.println(inicio);
+            System.out.println(d);
+            System.out.println(fecha);
+            
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

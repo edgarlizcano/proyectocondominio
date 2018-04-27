@@ -38,7 +38,7 @@ public class ADOModulos {
             cl.registerOutParameter(1, Types.INTEGER);
             //El siguiente parametro del procedimiento almacenado es el nombre
             cl.setString(2, m.getNombreModulo());
-            cl.setString(3, m.getUrlModulo()+"jsp");
+            cl.setString(3, m.getUrlModulo());
             cl.setBoolean(4, m.isVisible());
             
             

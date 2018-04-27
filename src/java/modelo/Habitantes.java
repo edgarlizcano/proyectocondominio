@@ -72,9 +72,6 @@ public class Habitantes implements Serializable {
     @ManyToOne(optional = false)
     private Usuarios usuarios;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "habitantes")
-    private List<Vehiculos> vehiculosList;
-    
     private boolean estatus;
 
     public Habitantes() {
@@ -167,13 +164,5 @@ public class Habitantes implements Serializable {
 
     public void setUsuarios(Usuarios usuarios) {
         this.usuarios = usuarios;
-    }
-
-    public List<Vehiculos> getVehiculosList() {
-        return vehiculosList;
-    }
-
-    public void setVehiculosList(List<Vehiculos> vehiculosList) {
-        this.vehiculosList = vehiculosList;
     }
 }

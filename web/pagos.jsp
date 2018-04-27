@@ -40,7 +40,7 @@
                     <tbody>
                     <%-- Lista de todos los Usuarios --%>
                     <%
-                        ArrayList<CasasHasCuotas> lista = ADOPagos.obtenerPagos();
+                        ArrayList<CasasHasCuotas> lista = (ArrayList) request.getSession().getAttribute("lista");
                         for (CasasHasCuotas c : lista) {
                     %>
                     <tr>
@@ -88,10 +88,7 @@
                     }
                 %>
             <div class="container-fluid">
-                    <form action="ControlReportes" method="POST">
-                        <input type="hidden" name="accion" value="ReportePagos" />
-                        <input class="btn btn-info" type="submit" value="Generar Reporte" />
-                    </form>
+                    <a href="consultapagos.jsp"><input class="btn btn-info" type="button" value="Nueva Consulta" /></a> 
             </div>
             
             </div>

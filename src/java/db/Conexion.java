@@ -10,7 +10,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,7 +26,6 @@ public class Conexion {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conexion = DriverManager.getConnection(URL + DB, USER, PASS);
-            //JOptionPane.showMessageDialog(null, "Se ha iniciado la conexión con el servidor de forma exitosa");
             System.out.println("Conexión Exitosa");
         } catch (ClassNotFoundException ex) {
             System.out.println("No se pudo conectar");

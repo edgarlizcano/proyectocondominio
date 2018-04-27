@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReciboDePago" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="690a722a-f1e7-4717-a26b-60bd5d96cb72">
+	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idPago" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[call obtenerPagoById($P{idPago})]]>
+	</queryString>
+	<field name="idPagos" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="monto" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cedulaDepositante" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre_apellido" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="referencia" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Bancos_idBancos" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estatus" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Usuarios_idUsuario" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="idBancos" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombreBanco" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="613" height="92" forecolor="#000000" backcolor="#CCCCCC" uuid="7f13ca50-d0ae-4530-a91c-d4dab4bf5170"/>
+				<staticText>
+					<reportElement x="20" y="20" width="234" height="23" forecolor="#000000" uuid="710265ac-080a-469d-8e88-304a3fb3bdc1"/>
+					<textElement>
+						<font fontName="Brush Script MT" size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Asociación Civil Condominio]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="395" y="43" width="180" height="20" forecolor="#000000" uuid="97dd23c4-68f5-4ddf-95a9-7b525865aa71"/>
+					<textElement textAlignment="Right">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Recibo de Pago]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="20" y="43" width="272" height="32" forecolor="#000000" uuid="0278c9f4-c674-41d1-abe0-135cc1b0b3b9"/>
+					<textElement>
+						<font fontName="Brush Script MT" size="26" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Urbanización El Cardenal]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="4c2a7b06-9293-46c4-907f-50c292b4de80"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número de Pago]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="159">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" forecolor="#990033" uuid="db74fe99-18db-4b28-a1c3-7f7148cdce42"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idPagos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="197" y="56" width="123" height="20" uuid="48e932db-e97e-42d3-b14a-8fee97d48fa3"/>
+				<textFieldExpression><![CDATA[$F{cedulaDepositante}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="403" y="56" width="92" height="20" uuid="a2531f8d-389c-43ad-86f2-dffb98ca01af"/>
+				<textFieldExpression><![CDATA[$F{estatus}?"Confirmado":"En Espera"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="110" width="77" height="20" uuid="ffe07ed4-610a-4525-a27f-5936a1d956b2"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="77" y="110" width="88" height="20" uuid="f0c4d45f-1aa3-4e48-bd88-b6adffe7c549"/>
+				<textFieldExpression><![CDATA[$F{monto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="307" y="110" width="80" height="20" uuid="a5912661-b125-4ada-b93a-bdeacb334dd8"/>
+				<textFieldExpression><![CDATA[$F{referencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="56" width="197" height="20" uuid="b4382952-a253-47d7-93a1-4b119942c9ac"/>
+				<textFieldExpression><![CDATA[$F{nombre_apellido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="165" y="110" width="142" height="20" uuid="1c4bbdca-6a1f-4cad-9778-e7082c8505a0"/>
+				<textFieldExpression><![CDATA[$F{nombreBanco}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="495" y="56" width="55" height="20" uuid="275c0f25-b9d2-4d34-9b58-b0a336a837e6"/>
+				<textFieldExpression><![CDATA[$F{Usuarios_idUsuario}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="197" y="36" width="123" height="20" uuid="fadaa619-1326-489c-a88d-25ac2cdf3c2c"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cedula del Depositante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="35" width="197" height="20" uuid="7cf79708-3b53-46a2-ac3e-0aa286bc43c2"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre y Apellido del Depositante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="89" width="77" height="20" uuid="10a850ce-ec8b-44db-801b-61ddb029413b"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="77" y="89" width="88" height="20" uuid="bfa3b39d-d993-49d0-b568-c56dd58a4b26"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="165" y="89" width="142" height="20" uuid="8210f144-5f26-4b23-be0d-34837e75f802"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Banco]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="307" y="89" width="80" height="20" uuid="00440ea1-d59e-4372-9a73-c9f3d95ec4aa"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº Referencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="35" width="92" height="20" uuid="7e60f261-725a-49a3-bfa4-50ccf19b568c"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estatus Pago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="495" y="35" width="55" height="20" uuid="449fb75a-f314-4796-88da-79e96d29656b"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tesorero]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="f2131569-4785-4501-ac21-404363caf236"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="57" height="13" backcolor="#E6E6E6" uuid="ffbba061-b59e-4a18-9d8f-7b7020395348"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="2feaedf7-f120-4fa1-8fc6-e43aab75a820"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

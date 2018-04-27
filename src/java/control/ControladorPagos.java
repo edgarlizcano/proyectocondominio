@@ -9,14 +9,17 @@ import db.ADOPagos;
 import db.ADOUsuarios;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.Bancos;
 import modelo.Casas;
+import modelo.CasasHasCuotas;
 import modelo.Cuotas;
 import modelo.Pagos;
 import modelo.Usuarios;
@@ -48,10 +51,10 @@ public class ControladorPagos extends HttpServlet {
                 case "ConfirmarPago":
                     this.confirmarPago(request, response);
                     break;
-                /*case "EliminarUsuario":
-                    this.eliminarUsuario(request, response);
+                case "ConsultaPorFiltro":
+                    this.pagosPorFiltros(request, response);
                     break;
-                case "RegistrarVenta":
+                /*case "RegistrarVenta":
                     this.registrarVenta(request, response);
                     break;*/
                 default:
@@ -119,22 +122,6 @@ public class ControladorPagos extends HttpServlet {
             response.sendRedirect("pagos.jsp?men=No se pudo confirmar el pago");
         }
     }
-    /*
-    private void eliminarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        Usuarios user = new Usuarios();
-        
-        user.setIdUsuario(Integer.parseInt(request.getParameter("id")));
-        
-        boolean rpta;
-        rpta = ADOUsuarios.eliminarUsuario(user);
-        if (rpta) {
-            //Si inserto lo redireccionamos a otra pagina que se llama "result.jsp"
-            response.sendRedirect("result.jsp?men=Se eliminó el Usuario de manera correcta");
-        } else {
-            //Si no se inserto lo redireccionamos a otra pagina que se llama "Usuario.jsp"
-            response.sendRedirect("result.jsp?men=No se eliminó el Usuario");
-        }
-    }*/
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -174,5 +161,40 @@ public class ControladorPagos extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void pagosPorFiltros(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String radio = request.getParameter("gridRadios");
+        String inicio = request.getParameter("fechainicial");
+        String fin = request.getParameter("fechafinal");        
+        int idCasa = Integer.parseInt(request.getParameter("numCasa"));        
+        
+        ArrayList <CasasHasCuotas> lista = null;
+        switch (radio) {
+                case "todos":
+                    lista = ADOPagos.obtenerPagos();
+                    break;
+                case "pendientes":
+                    lista = ADOPagos.obtenerPagosEnEspera();
+                    break;
+                case "confirmados":
+                    lista = ADOPagos.obtenerPagosConfirmados();
+                    break;
+                case "porFecha":
+                    lista = ADOPagos.obtenerPagoByFecha(inicio,fin);
+                    break;
+                case "porCasa":
+                    lista = ADOPagos.obtenerPagoByCasa(idCasa);
+                    break;
+                default:
+                    break;
+            }
+        if (lista != null) {
+            request.getSession().setAttribute("lista", lista);
+            response.sendRedirect("pagos.jsp");
+        } else {
+            request.getSession().setAttribute("men", "No se pudo obtener la lista, consulte al Administrador");
+            response.sendRedirect("pagos.jsp");
+        }
+    }
 
 }

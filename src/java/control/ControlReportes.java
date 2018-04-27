@@ -8,6 +8,9 @@ package control;
 import db.Conexion;
 import java.io.IOException;
 import java.sql.Connection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -44,27 +47,34 @@ public class ControlReportes extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     Habitantes hab;
-    
+    String radio;
+            
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession sesion = request.getSession();
         hab = (Habitantes) sesion.getAttribute("habitante");
         
-        //reportePagos(request, response);
-        String accion = request.getParameter("accion");
-            switch (accion) {
-                case "ReportePagos":
-                    this.reportePagos(request, response);
+        radio = request.getParameter("gridRadios");
+        
+        switch (radio) {
+                case "todos":
+                    reportePagos(request,response);
                     break;
-                case "ReportePagosPorCasa":
-                    this.reportePagosPorCasa(request, response);
+                case "pendientes":
+                    reportePagosPendientes(request, response);
                     break;
-                /*case "EliminarUsuario":
-                    this.eliminarUsuario(request, response);
+                case "confirmados":
+                    reportePagosConfirmados(request, response);
                     break;
-                case "RegistrarVenta":
-                    this.registrarVenta(request, response);
-                    break;*/
+                case "porFecha":
+                    reportePagosPorFechas(request, response);
+                    break;
+                case "porCasa":
+                    reportePagosPorCasa(request,response);
+                    break;
+                case "reciboPago":
+                    reciboPago(request,response);
+                    break;
                 default:
                     break;
             }
@@ -169,13 +179,12 @@ public class ControlReportes extends HttpServlet {
             System.out.println("Error No Class def Found Error: "+e);
         }
     }
-
-    private void reportePagosPorCasa(HttpServletRequest request, HttpServletResponse response) {
-        
+    
+    private void reciboPago(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/pdf");
         System.setProperty("java.awt.headless", "true");
-        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\reportePagosPorHabitante.jasper";
-        
+        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\ReciboDePago.jasper";
+        int idPago = Integer.parseInt(request.getParameter("idPago"));
         Connection con = Conexion.getConexion();
         
         try {
@@ -183,8 +192,8 @@ public class ControlReportes extends HttpServlet {
             //reporte = (JasperReport) JRLoader.loadObjectFromFile(getServletContext().getRealPath(path));
             JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
             
-            Map parametro = new HashMap();
-            parametro.put("idhab", hab.getIdHabitante());
+            Map <String, Object> parametro = new HashMap();
+            parametro.put("idPago", idPago);
             
             //JasperPrint jprint = JasperFillManager.fillReport(reporte, null, Conexion.getConexion());
             JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, con);
@@ -199,4 +208,131 @@ public class ControlReportes extends HttpServlet {
         }
     }
 
+    private void reportePagosPorCasa(HttpServletRequest request, HttpServletResponse response) {
+        
+        response.setContentType("application/pdf");
+        System.setProperty("java.awt.headless", "true");
+        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\ReportesPagosPorCasa.jasper";
+        
+        int idCasa = Integer.parseInt(request.getParameter("numCasa"));
+        Connection con = Conexion.getConexion();
+        
+        try {
+            ServletOutputStream out = response.getOutputStream();
+            //reporte = (JasperReport) JRLoader.loadObjectFromFile(getServletContext().getRealPath(path));
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            
+            Map <String, Object> parametro = new HashMap();
+            parametro.put("idCasa", idCasa);
+            
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, con);
+            JRExporter exporter = new JRPdfExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jprint);
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
+            exporter.exportReport();
+        } catch (JRException | IOException ex) {
+            Logger.getLogger(ControlReportes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoClassDefFoundError e){
+            System.out.println("Error No Class def Found Error: "+e);
+        }
+    }
+    
+    private void reportePagosPorFechas(HttpServletRequest request, HttpServletResponse response) {
+        
+        response.setContentType("application/pdf");
+        System.setProperty("java.awt.headless", "true");
+        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\ReportesPagosPorFechas.jasper";
+        
+        String ini = request.getParameter("fechainicial");
+        String fin = request.getParameter("fechafinal");        
+        
+        Connection con = Conexion.getConexion();
+        
+        try {
+            Date dIni = new SimpleDateFormat("yyyy-MM-dd").parse(ini);
+            Date dFin = new SimpleDateFormat("yyyy-MM-dd").parse(fin);
+        
+            String fechaIni = new SimpleDateFormat("dd-MM-yyyy").format(dIni);
+            String fechaFin = new SimpleDateFormat("dd-MM-yyyy").format(dFin);
+            
+            Date fechaInicio = new SimpleDateFormat("dd-MM-yyyy").parse(fechaIni);
+            Date fechaFinal = new SimpleDateFormat("dd-MM-yyyy").parse(fechaFin);
+        
+            ServletOutputStream out = response.getOutputStream();
+            //reporte = (JasperReport) JRLoader.loadObjectFromFile(getServletContext().getRealPath(path));
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            
+            Map <String, Object> parametro = new HashMap();
+            parametro.put("inicio", fechaInicio);
+            parametro.put("final", fechaFinal);
+            
+            //JasperPrint jprint = JasperFillManager.fillReport(reporte, null, Conexion.getConexion());
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, con);
+            JRExporter exporter = new JRPdfExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jprint);
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
+            exporter.exportReport();
+        } catch (JRException | IOException ex) {
+            Logger.getLogger(ControlReportes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoClassDefFoundError e){
+            System.out.println("Error No Class def Found Error: "+e);
+        } catch (ParseException ex) {
+            Logger.getLogger(ControlReportes.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void reportePagosConfirmados(HttpServletRequest request, HttpServletResponse response) {
+        
+        response.setContentType("application/pdf");
+        System.setProperty("java.awt.headless", "true");
+        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\ReportesPagosConfirmados.jasper";
+              
+        Connection con = Conexion.getConexion();
+        
+        try {
+            ServletOutputStream out = response.getOutputStream();
+            //reporte = (JasperReport) JRLoader.loadObjectFromFile(getServletContext().getRealPath(path));
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            
+            Map <String, Object> parametro = new HashMap(); 
+            //JasperPrint jprint = JasperFillManager.fillReport(reporte, null, Conexion.getConexion());
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, con);
+            JRExporter exporter = new JRPdfExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jprint);
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
+            exporter.exportReport();
+        } catch (JRException | IOException ex) {
+            Logger.getLogger(ControlReportes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoClassDefFoundError e){
+            System.out.println("Error No Class def Found Error: "+e);
+        }
+    }
+    
+    private void reportePagosPendientes(HttpServletRequest request, HttpServletResponse response) {
+        
+        response.setContentType("application/pdf");
+        System.setProperty("java.awt.headless", "true");
+        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\ReportesPagosEnEspera.jasper";
+              
+        Connection con = Conexion.getConexion();
+        
+        try {
+            ServletOutputStream out = response.getOutputStream();
+            //reporte = (JasperReport) JRLoader.loadObjectFromFile(getServletContext().getRealPath(path));
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            
+            Map <String, Object> parametro = new HashMap(); 
+            //JasperPrint jprint = JasperFillManager.fillReport(reporte, null, Conexion.getConexion());
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, con);
+            JRExporter exporter = new JRPdfExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jprint);
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
+            exporter.exportReport();
+        } catch (JRException | IOException ex) {
+            Logger.getLogger(ControlReportes.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoClassDefFoundError e){
+            System.out.println("Error No Class def Found Error: "+e);
+        }
+    }
+    
 }

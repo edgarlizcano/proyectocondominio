@@ -23,25 +23,20 @@ import javax.persistence.Table;
  *
  * @author Edgar
  */
-@Entity
-@Table(name = "casas")
-@NamedQueries({
-    @NamedQuery(name = "Casas.findAll", query = "SELECT c FROM Casas c")})
+
 public class Casas implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected int idCasas;
 
     @Basic(optional = false)
     @Column(name = "nombreCasa")
     private String nombreCasa;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "casas")
+
     private List<Habitantes> habitantesList;
-    @JoinColumn(name = "Calles_idCalles", referencedColumnName = "idCalles", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    
     private Calles calles;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "casas")
+
     private List<CasasHasCuotas> casasHasCuotasList;
 
     public Casas() {
