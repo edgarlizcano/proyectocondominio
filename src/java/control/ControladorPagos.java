@@ -6,21 +6,17 @@
 package control;
 
 import db.ADOPagos;
-import db.ADOUsuarios;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.Bancos;
 import modelo.Casas;
-import modelo.CasasHasCuotas;
-import modelo.Cuotas;
 import modelo.Pagos;
 import modelo.Usuarios;
 
@@ -68,7 +64,6 @@ public class ControladorPagos extends HttpServlet {
     private void registrarPago(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
         Pagos pago = new Pagos();
-        Cuotas cuota = new Cuotas();
         Casas casa = new Casas();
         Bancos banco = new Bancos();
         
@@ -78,12 +73,10 @@ public class ControladorPagos extends HttpServlet {
         pago.setNombreApellido(request.getParameter("nombre"));
         pago.setReferencia(request.getParameter("referencia"));
         banco.setIdBancos(Integer.parseInt(request.getParameter("idBanco")));
-        casa.setIdCasas(Integer.parseInt(request.getParameter("numeroCasa")));
-        cuota.setIdCuotas(Integer.parseInt(request.getParameter("cuota")));
         pago.setBanco(banco);
         
         boolean rpta;
-        rpta = ADOPagos.insertarPago(pago, casa, cuota);
+        rpta = ADOPagos.insertarPago(pago, casa);
         if (rpta) {
             //Enviando correo electrónico al usuario
             String msg ="Usted ha registrado el pago Correctamente\n";
@@ -168,7 +161,7 @@ public class ControladorPagos extends HttpServlet {
         String fin = request.getParameter("fechafinal");        
         int idCasa = Integer.parseInt(request.getParameter("numCasa"));        
         
-        ArrayList <CasasHasCuotas> lista = null;
+        ArrayList <Pagos> lista = null;
         switch (radio) {
                 case "todos":
                     lista = ADOPagos.obtenerPagos();

@@ -49,6 +49,7 @@ public class LoginServlet extends HttpServlet {
             sesion.setAttribute("modulos", modulos);
             sesion.setAttribute("usuario", usuario);
             sesion.setAttribute("habitante", usuario.getHabitante());
+            
             response.sendRedirect("index.jsp");
         }else{
             request.getSession().setAttribute("men", "Usuario o Contraseña incorrecta, confirme sus datos");

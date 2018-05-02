@@ -13,8 +13,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import modelo.Bancos;
 import modelo.Casas;
-import modelo.CasasHasCuotas;
-import modelo.Cuotas;
+import modelo.Cuentas;
 import modelo.Pagos;
 import modelo.Usuarios;
 
@@ -24,14 +23,14 @@ import modelo.Usuarios;
  */
 public class ADOPagos {
     //Metodo utilizado para insertar un Usuario a nuestra Base de datos
-    public static synchronized boolean insertarPago(Pagos p, Casas ca, Cuotas cu) {
+    public static synchronized boolean insertarPago(Pagos p, Casas ca) {
         Connection cn = null;
         CallableStatement cl = null;
         boolean rpta = false;
         try {
             //Nombre del procedimiento almacenado y como espera tres parametros
             //le ponemos 3 interrogantes
-            String call = "{CALL agregarPago(?,?,?,?,?,?,?,?,?)}";
+            String call = "{CALL agregarPago(?,?,?,?,?,?,?,?)}";
             //Obtenemos la conexion
             cn = Conexion.getConexion();
             //Decimos que vamos a crear una transaccion
@@ -48,8 +47,7 @@ public class ADOPagos {
             cl.setString(5, p.getNombreApellido());
             cl.setString(6, p.getReferencia());
             cl.setInt(7, p.getBanco().getIdBancos());
-            cl.setInt(8, ca.getIdCasas());
-            cl.setInt(9, cu.getIdCuotas());
+            cl.setInt(8, ca.getCuenta().getIdCuenta());
             
             //Ejecutamos la sentencia y si nos devuelve el valor de 1 es porque
             //registro de forma correcta los datos
@@ -76,9 +74,9 @@ public class ADOPagos {
     }
     //Metodo utilizado para actualizar un Usuarios a nuestra Base de datos
     
-    public static synchronized ArrayList<CasasHasCuotas> obtenerPagos() {
+    public static synchronized ArrayList<Pagos> obtenerPagos() {
         //El array que contendra todos nuestros productos
-        ArrayList<CasasHasCuotas> lista = new ArrayList<>();
+        ArrayList<Pagos> lista = new ArrayList<>();
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs;
@@ -96,28 +94,25 @@ public class ADOPagos {
             //e insertarlo en nuestro array
             while (rs.next()) {
                 Pagos p = new Pagos();
-                Casas ca = new Casas();
-                Cuotas cu = new Cuotas();
                 Bancos b = new Bancos();
                 
                 //Obtenemos los valores de la consulta y creamos
                 //nuestro objeto producto
+                
+                b.setIdBancos(rs.getInt("idBancos"));
                 b.setNombreBanco(rs.getString("nombreBanco"));
+                
                 p.setIdPagos(rs.getInt("idPagos"));
-                p.setMonto(rs.getFloat("monto"));
+                p.setMonto(rs.getDouble("monto"));
                 p.setFecha(rs.getString("fecha"));
                 p.setEstatus(rs.getBoolean("estatus"));
+                p.setCedulaDepositante(rs.getString("cedulaDepositante"));
+                p.setNombreApellido(rs.getString("nombre_apellido"));
+                p.setReferencia(rs.getString("referencia"));
+                
                 p.setBanco(b);
-                
-                cu.setIdCuotas(rs.getInt("idCuotas"));
-                cu.setNombre(rs.getString("nombre"));
-                
-                ca.setIdCasas(rs.getInt("idCasa"));
-                ca.setNombreCasa(rs.getString("nombreCasa"));
-                
-                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
                 //Lo adicionamos a nuestra lista
-                lista.add(cc);
+                lista.add(p);
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);
@@ -131,19 +126,19 @@ public class ADOPagos {
         return lista;
     }
     
-    public static synchronized ArrayList<CasasHasCuotas> obtenerPagosByHabitante(int id) {
+    public static synchronized ArrayList<Pagos> obtenerPagosByCuenta(int idCuenta) {
         //El array que contendra todos nuestros pagos
-        ArrayList<CasasHasCuotas> lista = new ArrayList<>();
+        ArrayList<Pagos> lista = new ArrayList<>();
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs;
         try {
             //Nombre del procedimiento almacenado
-            String call = "{CALL obtenerPagosByHabitante(?)}";
+            String call = "{CALL obtenerPagosByCuenta(?)}";
             
             cn = Conexion.getConexion();
             cl = cn.prepareCall(call);
-            cl.setInt(1, id);
+            cl.setInt(1, idCuenta);
             //La sentencia lo almacenamos en un resulset
             rs = cl.executeQuery();
             //cl.execute();
@@ -152,26 +147,27 @@ public class ADOPagos {
             //e insertarlo en nuestro array
             while (rs.next()) {
                 Pagos p = new Pagos();
-                Casas ca = new Casas();
-                Cuotas cu = new Cuotas();
+                Bancos b = new Bancos();
+                Usuarios u = new Usuarios();
                 
                 //Obtenemos los valores de la consulta y creamos
                 //nuestro objeto producto
                 
                 p.setIdPagos(rs.getInt("idPagos"));
-                p.setMonto(rs.getFloat("monto"));
+                p.setMonto(rs.getDouble("monto"));
                 p.setFecha(rs.getString("fecha"));
                 p.setEstatus(rs.getBoolean("estatus"));
+                p.setCedulaDepositante(rs.getString("cedulaDepositante"));
+                p.setNombreApellido(rs.getString("nombre_apellido"));
+                p.setReferencia(rs.getString("referencia"));
+                u.setIdUsuario(rs.getInt("Usuarios_idUsuario"));
+                b.setIdBancos(rs.getInt("idBancos"));
+                b.setNombreBanco(rs.getString("nombreBanco"));
                 
-                cu.setIdCuotas(rs.getInt("idCuotas"));
-                cu.setNombre(rs.getString("nombre"));
-                
-                ca.setIdCasas(rs.getInt("idCasa"));
-                ca.setNombreCasa(rs.getString("nombreCasa"));
-                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
-                
+                p.setUsuario(u);
+                p.setBanco(b);
                 //Lo adicionamos a nuestra lista
-                lista.add(cc);
+                lista.add(p);
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);
@@ -188,6 +184,7 @@ public class ADOPagos {
     public static synchronized Pagos obtenerPagoById(int idPago) {
         Pagos p = new Pagos();
         Bancos b = new Bancos();
+        Cuentas c = new Cuentas();
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs;
@@ -208,7 +205,7 @@ public class ADOPagos {
             while (rs.next()) {
                 
                 p.setIdPagos(rs.getInt("idPagos"));
-                p.setMonto(rs.getFloat("monto"));
+                p.setMonto(rs.getDouble("monto"));
                 p.setFecha(rs.getString("fecha"));
                 p.setCedulaDepositante(rs.getString("cedulaDepositante"));
                 p.setNombreApellido(rs.getString("nombre_apellido"));
@@ -216,6 +213,9 @@ public class ADOPagos {
                 p.setEstatus(rs.getBoolean("estatus"));
                 b.setIdBancos(rs.getInt("idBancos"));
                 b.setNombreBanco(rs.getString("nombreBanco"));
+                c.setIdCuenta(rs.getInt("Cuentas_idCuenta"));
+                
+                p.setCuenta(c);
                 p.setBanco(b);
             }
             Conexion.cerrarCall(cl);
@@ -272,7 +272,8 @@ public class ADOPagos {
 
     public static ArrayList obtenerPagosConfirmados() {
         //El array que contendra todos nuestros pagos
-        ArrayList<CasasHasCuotas> lista = null;
+        ArrayList<Pagos> lista = null;
+        
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs;
@@ -288,30 +289,31 @@ public class ADOPagos {
             
             while (rs.next()) {
                 Pagos p = new Pagos();
-                Casas ca = new Casas();
-                Cuotas cu = new Cuotas();
                 Usuarios u = new Usuarios();
                 Bancos b = new Bancos();
+                Cuentas c = new Cuentas();
                 
                 b.setNombreBanco(rs.getString("nombreBanco"));
                 u.setNombreUsuario(rs.getString("nombreUsuario"));
                 
                 p.setIdPagos(rs.getInt("idPagos"));
-                p.setMonto(rs.getFloat("monto"));
+                p.setMonto(rs.getDouble("monto"));
                 p.setFecha(rs.getString("fecha"));
+                p.setCedulaDepositante(rs.getString("cedulaDepositante"));
+                p.setNombreApellido(rs.getString("nombre_apellido"));
+                p.setReferencia(rs.getString("referencia"));
                 p.setEstatus(rs.getBoolean("estatus"));
+                b.setIdBancos(rs.getInt("Bancos_idBancos"));
+                b.setNombreBanco(rs.getString("nombreBanco"));
+                c.setIdCuenta(rs.getInt("Cuentas_idCuenta"));
                 
-                cu.setIdCuotas(rs.getInt("idCuotas"));
-                cu.setNombre(rs.getString("nombre"));
-                
-                ca.setIdCasas(rs.getInt("idCasa"));
-                ca.setNombreCasa(rs.getString("nombreCasa"));
-                p.setUsuario(u);
+                p.setCuenta(c);
                 p.setBanco(b);
-                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
+                p.setUsuario(u);
                 
                 //Lo adicionamos a nuestra lista
-                lista.add(cc);
+                
+                lista.add(p);
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);
@@ -327,7 +329,7 @@ public class ADOPagos {
     
     public static ArrayList obtenerPagosEnEspera() {
         //El array que contendra todos nuestros pagos
-        ArrayList<CasasHasCuotas> lista = null;
+        ArrayList<Pagos> lista = null;
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs;
@@ -343,30 +345,26 @@ public class ADOPagos {
             
             while (rs.next()) {
                 Pagos p = new Pagos();
-                Casas ca = new Casas();
-                Cuotas cu = new Cuotas();
-                Usuarios u = new Usuarios();
                 Bancos b = new Bancos();
-                
-                b.setNombreBanco(rs.getString("nombreBanco"));
-                u.setNombreUsuario("En Espera");
+                Cuentas c = new Cuentas();
                 
                 p.setIdPagos(rs.getInt("idPagos"));
-                p.setMonto(rs.getFloat("monto"));
+                p.setMonto(rs.getDouble("monto"));
                 p.setFecha(rs.getString("fecha"));
+                p.setCedulaDepositante(rs.getString("cedulaDepositante"));
+                p.setNombreApellido(rs.getString("nombre_apellido"));
+                p.setReferencia(rs.getString("referencia"));
                 p.setEstatus(rs.getBoolean("estatus"));
+                b.setIdBancos(rs.getInt("Bancos_idBancos"));
+                b.setNombreBanco(rs.getString("nombreBanco"));
+                c.setIdCuenta(rs.getInt("Cuentas_idCuenta"));
                 
-                cu.setIdCuotas(rs.getInt("idCuotas"));
-                cu.setNombre(rs.getString("nombre"));
-                
-                ca.setIdCasas(rs.getInt("idCasa"));
-                ca.setNombreCasa(rs.getString("nombreCasa"));
-                p.setUsuario(u);
+                p.setCuenta(c);
                 p.setBanco(b);
-                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
                 
                 //Lo adicionamos a nuestra lista
-                lista.add(cc);
+                
+                lista.add(p);
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);
@@ -382,7 +380,7 @@ public class ADOPagos {
 
     public static ArrayList obtenerPagoByFecha(String inicio, String fin) {
         //El array que contendra todos nuestros pagos
-        ArrayList<CasasHasCuotas> lista = null;
+        ArrayList<Pagos> lista = null;
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs;
@@ -400,30 +398,31 @@ public class ADOPagos {
             
             while (rs.next()) {
                 Pagos p = new Pagos();
-                Casas ca = new Casas();
-                Cuotas cu = new Cuotas();
                 Usuarios u = new Usuarios();
                 Bancos b = new Bancos();
+                Cuentas c = new Cuentas();
                 
                 b.setNombreBanco(rs.getString("nombreBanco"));
-                
-                u.setNombreUsuario(rs.getString("nombreUsuario"));
+//                u.setNombreUsuario(rs.getString("nombreUsuario"));
                 
                 p.setIdPagos(rs.getInt("idPagos"));
                 p.setMonto(rs.getFloat("monto"));
                 p.setFecha(rs.getString("fecha"));
+                p.setCedulaDepositante(rs.getString("cedulaDepositante"));
+                p.setNombreApellido(rs.getString("nombre_apellido"));
+                p.setReferencia(rs.getString("referencia"));
                 p.setEstatus(rs.getBoolean("estatus"));
+                b.setIdBancos(rs.getInt("Bancos_idBancos"));
+                b.setNombreBanco(rs.getString("nombreBanco"));
+                c.setIdCuenta(rs.getInt("Cuentas_idCuenta"));
+                
+                p.setCuenta(c);
                 p.setBanco(b);
                 p.setUsuario(u);
-                cu.setIdCuotas(rs.getInt("idCuotas"));
-                cu.setNombre(rs.getString("nombre"));
-                
-                ca.setIdCasas(rs.getInt("idCasa"));
-                ca.setNombreCasa(rs.getString("nombreCasa"));
-                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
                 
                 //Lo adicionamos a nuestra lista
-                lista.add(cc);
+                
+                lista.add(p);
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);
@@ -439,7 +438,7 @@ public class ADOPagos {
 
     public static ArrayList obtenerPagoByCasa(int idCasa) {
         //El array que contendra todos nuestros pagos
-        ArrayList<CasasHasCuotas> lista = null;
+        ArrayList<Pagos> lista = null;
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs;
@@ -456,31 +455,31 @@ public class ADOPagos {
             
             while (rs.next()) {
                 Pagos p = new Pagos();
-                Casas ca = new Casas();
-                Cuotas cu = new Cuotas();
                 Usuarios u = new Usuarios();
                 Bancos b = new Bancos();
+                Cuentas c = new Cuentas();
                 
                 b.setNombreBanco(rs.getString("nombreBanco"));
-                
-                u.setIdUsuario(rs.getInt("Usuarios_idUsuario"));
+                //u.setNombreUsuario(rs.getString("nombreUsuario"));
                 
                 p.setIdPagos(rs.getInt("idPagos"));
                 p.setMonto(rs.getFloat("monto"));
                 p.setFecha(rs.getString("fecha"));
+                p.setCedulaDepositante(rs.getString("cedulaDepositante"));
+                p.setNombreApellido(rs.getString("nombre_apellido"));
+                p.setReferencia(rs.getString("referencia"));
                 p.setEstatus(rs.getBoolean("estatus"));
+                b.setIdBancos(rs.getInt("Bancos_idBancos"));
+                b.setNombreBanco(rs.getString("nombreBanco"));
+                c.setIdCuenta(rs.getInt("Cuentas_idCuenta"));
                 
-                cu.setIdCuotas(rs.getInt("idCuotas"));
-                cu.setNombre(rs.getString("nombre"));
-                
-                ca.setIdCasas(rs.getInt("idCasa"));
-                ca.setNombreCasa(rs.getString("nombreCasa"));
-                p.setUsuario(u);
+                p.setCuenta(c);
                 p.setBanco(b);
-                CasasHasCuotas cc = new CasasHasCuotas(ca, cu, p);
+                p.setUsuario(u);
                 
                 //Lo adicionamos a nuestra lista
-                lista.add(cc);
+                
+                lista.add(p);
             }
             Conexion.cerrarCall(cl);
             Conexion.cerrarConexion(cn);

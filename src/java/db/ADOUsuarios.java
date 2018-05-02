@@ -13,6 +13,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import modelo.Calles;
 import modelo.Casas;
+import modelo.Cuentas;
 import modelo.Habitantes;
 import modelo.Usuarios;
 
@@ -206,6 +207,7 @@ public class ADOUsuarios {
         Habitantes habitante = null;
         Casas casa = null;
         Calles calle = null;
+        Cuentas cuenta = null;
         Connection cn = null;
         CallableStatement cl = null;
         ResultSet rs = null;
@@ -225,7 +227,8 @@ public class ADOUsuarios {
                 habitante = new Habitantes();
                 casa = new Casas();
                 calle = new Calles();
-                
+                cuenta = new Cuentas();
+                                
                 usuario.setIdUsuario(rs.getInt("idUsuario"));
                 usuario.setNombreUsuario(rs.getString("nombreUsuario"));
                 usuario.setEmail(rs.getString("email"));
@@ -246,9 +249,14 @@ public class ADOUsuarios {
                 casa.setIdCasas(rs.getInt("idCasa"));
                 casa.setNombreCasa(rs.getString("nombreCasa"));
                 
+                cuenta.setIdCuenta(rs.getInt("idCuenta"));
+                cuenta.setFondo(rs.getDouble("fondo"));
+                
+                
                 calle.setIdCalles(rs.getInt("idCalles"));
                 calle.setNombreCalle(rs.getString("nombreCalle"));
                 
+                casa.setCuenta(cuenta);
                 casa.setCalles(calle);
                 habitante.setCasas(casa);
                 usuario.setHabitante(habitante);

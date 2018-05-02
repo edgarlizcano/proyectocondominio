@@ -4,6 +4,7 @@
     Author     : Edgar
 --%>
 
+<%@page import="modelo.Pagos"%>
 <%@page import="db.ADOPagos"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="modelo.CasasHasCuotas"%>
@@ -31,10 +32,6 @@
                             <th scope="col">Fecha</th>
                             <th scope="col">Monto</th>
                             <th scope="col">Estado del Pago</th>
-                            <th scope="col">ID Cuota</th>
-                            <th scope="col">Nombre Cuota</th>
-                            <th scope="col">ID Casa</th>
-                            <th scope="col">Nombre Casa</th>
                             <th scope="col">Acción</th>
                         </tr>
                     </thead>
@@ -42,30 +39,26 @@
                     <%-- Lista de todos los Usuarios --%>
                     <%
                         Habitantes h = (Habitantes) session.getAttribute("habitante");
-                        ArrayList<CasasHasCuotas> lista = ADOPagos.obtenerPagosByHabitante(h.getIdHabitante());
-                        for (CasasHasCuotas c : lista) {
+                        ArrayList<Pagos> lista = ADOPagos.obtenerPagosByCuenta(h.getCasas().getCuenta().getIdCuenta());
+                        for (Pagos c : lista) {
                     %>
                     <tr>
-                        <td><%= c.getPagos().getIdPagos() %></td>
-                        <td><%= c.getPagos().getFecha() %></td>
-                        <td><%= c.getPagos().getMonto() %></td>
+                        <td><%= c.getIdPagos() %></td>
+                        <td><%= c.getFecha() %></td>
+                        <td><%= c.getMonto() %></td>
                         <td>
                             <%
-                                if (c.getPagos().isEstatus()){
+                                if (c.isEstatus()){
                                     out.print("Confirmado");
                                 }else{
                                     out.print("En Espera");
                                 }
                             %>
                         </td>
-                        <td><%= c.getCuotas().getIdCuotas() %></td>
-                        <td><%= c.getCuotas().getNombre() %></td>
-                        <td><%= c.getCasas().getIdCasas() %></td>
-                        <td><%= c.getCasas().getNombreCasa() %></td>
                         <td>
                             <form action="ControlReportes" method="POST">
                                 <input type="hidden" name="gridRadios" value="reciboPago" />
-                                <input type="hidden" name="idPago" value="<%= c.getPagos().getIdPagos() %>" class="btn btn-success"/>
+                                <input type="hidden" name="idPago" value="<%= c.getIdPagos() %>" class="btn btn-success"/>
                                 <input type="submit" value="Recibo" />
                             </form>
                         </td>

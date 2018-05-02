@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReportesPagosPorFechas" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ef5aacb9-b9b6-46f4-8414-a7816bbee413">
-	<property name="ireport.zoom" value="1.2100000000000002"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.9487171000000014"/>
+	<property name="ireport.x" value="70"/>
+	<property name="ireport.y" value="14"/>
 	<parameter name="inicio" class="java.util.Date">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -15,22 +15,34 @@
 	<field name="idPagos" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="monto" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="fecha" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="monto" class="java.lang.Double">
+	<field name="cedulaDepositante" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre_apellido" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="referencia" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Bancos_idBancos" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="estatus" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="Usuarios_idUsuario" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Cuentas_idCuenta" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="nombreBanco" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="idCuotas" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="nombre" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="idCasa" class="java.lang.Integer">
@@ -39,7 +51,9 @@
 	<field name="nombreCasa" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Usuarios_idUsuario" class="java.lang.Integer"/>
+	<field name="Calles_idCalles" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<group name="idCasa">
 		<groupExpression><![CDATA[$F{idCasa}]]></groupExpression>
 		<groupHeader>
@@ -129,39 +143,32 @@
 				<text><![CDATA[idPagos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="69" y="0" width="69" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="c3f5b79a-46d5-48da-8767-eebacb3f7f9a"/>
+				<reportElement mode="Opaque" x="69" y="0" width="88" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="c3f5b79a-46d5-48da-8767-eebacb3f7f9a"/>
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[fecha]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="138" y="0" width="69" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="9ebe071c-8724-4088-b494-daaf6fe2556a"/>
+				<reportElement mode="Opaque" x="226" y="0" width="79" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="9ebe071c-8724-4088-b494-daaf6fe2556a"/>
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[monto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="207" y="0" width="69" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="abdfc04e-4743-44e0-a4d6-1e388de17fc3"/>
+				<reportElement mode="Opaque" x="305" y="0" width="109" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="abdfc04e-4743-44e0-a4d6-1e388de17fc3"/>
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[nombreBanco]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="276" y="0" width="69" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="370f9906-df79-4805-807a-01faff05084d"/>
+				<reportElement mode="Opaque" x="157" y="0" width="69" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="370f9906-df79-4805-807a-01faff05084d"/>
 				<textElement textAlignment="Center">
 					<font size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[idCuotas]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="345" y="0" width="69" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="fd6e1a21-7a17-4a95-b11e-51582104be86"/>
-				<textElement textAlignment="Center">
-					<font size="10" isBold="true"/>
-				</textElement>
-				<text><![CDATA[nombre]]></text>
+				<text><![CDATA[Nº Referencia]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="414" y="0" width="69" height="20" forecolor="#006699" backcolor="#E6E6E6" uuid="891ad9c8-0c60-4860-b736-313ee13d01bb"/>
@@ -192,39 +199,25 @@
 				<textFieldExpression><![CDATA[$F{idPagos}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="69" y="0" width="69" height="20" uuid="63660013-d505-4452-886d-bae21e185253"/>
+				<reportElement x="69" y="0" width="88" height="20" uuid="63660013-d505-4452-886d-bae21e185253"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="138" y="0" width="69" height="20" uuid="62a6ad60-4268-4ff5-93b9-f69654e877ae"/>
+				<reportElement x="226" y="0" width="79" height="20" uuid="62a6ad60-4268-4ff5-93b9-f69654e877ae"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="207" y="0" width="69" height="20" uuid="ed2d617d-3c02-4fd0-bfed-bcbd773ac4c3"/>
+				<reportElement x="305" y="0" width="109" height="20" uuid="ed2d617d-3c02-4fd0-bfed-bcbd773ac4c3"/>
 				<textElement textAlignment="Center">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombreBanco}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="276" y="0" width="69" height="20" uuid="76748547-31db-42ec-a37e-def47e86ee90"/>
-				<textElement textAlignment="Center">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{idCuotas}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="345" y="0" width="69" height="20" uuid="ba20c92a-313c-41a5-82e5-5eca896c7840"/>
-				<textElement textAlignment="Center">
-					<font size="10"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="414" y="0" width="69" height="20" uuid="6c071d3c-b687-4b68-97e6-42ea50fffbfe"/>
@@ -239,6 +232,11 @@
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Usuarios_idUsuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="157" y="0" width="69" height="20" uuid="7b9778c8-025c-4ba9-b650-1c171a097a8f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{referencia}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

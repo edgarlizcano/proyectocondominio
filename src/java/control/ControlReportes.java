@@ -6,6 +6,7 @@
 package control;
 
 import db.Conexion;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.text.ParseException;
@@ -155,20 +156,16 @@ public class ControlReportes extends HttpServlet {
     private void reportePagos(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/pdf");
         System.setProperty("java.awt.headless", "true");
-        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\reportePagos.jasper";
-        
+       
+        String path = getServletContext().getRealPath("/WEB-INF/ReportesPagos.jasper");
         Connection con = Conexion.getConexion();
         
         try {
+            File file = new File(path);
             ServletOutputStream out = response.getOutputStream();
-            //reporte = (JasperReport) JRLoader.loadObjectFromFile(getServletContext().getRealPath(path));
-            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(file);
             
-            Map parametro = new HashMap();
-            parametro.put("idhab", hab.getIdHabitante());
-            
-            //JasperPrint jprint = JasperFillManager.fillReport(reporte, null, Conexion.getConexion());
-            JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, con);
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, null, con);
             JRExporter exporter = new JRPdfExporter();
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, jprint);
             exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);
@@ -183,14 +180,15 @@ public class ControlReportes extends HttpServlet {
     private void reciboPago(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/pdf");
         System.setProperty("java.awt.headless", "true");
-        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\ReciboDePago.jasper";
+        String path = getServletContext().getRealPath("/WEB-INF/ReciboDePago.jasper");
+        
         int idPago = Integer.parseInt(request.getParameter("idPago"));
         Connection con = Conexion.getConexion();
         
         try {
+            File file = new File(path);
             ServletOutputStream out = response.getOutputStream();
-            //reporte = (JasperReport) JRLoader.loadObjectFromFile(getServletContext().getRealPath(path));
-            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(file);
             
             Map <String, Object> parametro = new HashMap();
             parametro.put("idPago", idPago);
@@ -212,15 +210,15 @@ public class ControlReportes extends HttpServlet {
         
         response.setContentType("application/pdf");
         System.setProperty("java.awt.headless", "true");
-        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\ReportesPagosPorCasa.jasper";
+        String path = getServletContext().getRealPath("/WEB-INF/ReportesPagosPorCasa.jasper");
         
         int idCasa = Integer.parseInt(request.getParameter("numCasa"));
         Connection con = Conexion.getConexion();
         
         try {
+            File file = new File(path);
             ServletOutputStream out = response.getOutputStream();
-            //reporte = (JasperReport) JRLoader.loadObjectFromFile(getServletContext().getRealPath(path));
-            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(file);
             
             Map <String, Object> parametro = new HashMap();
             parametro.put("idCasa", idCasa);
@@ -241,7 +239,7 @@ public class ControlReportes extends HttpServlet {
         
         response.setContentType("application/pdf");
         System.setProperty("java.awt.headless", "true");
-        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\ReportesPagosPorFechas.jasper";
+        String path = getServletContext().getRealPath("/WEB-INF/ReportesPagosPorFechas.jasper");
         
         String ini = request.getParameter("fechainicial");
         String fin = request.getParameter("fechafinal");        
@@ -258,9 +256,9 @@ public class ControlReportes extends HttpServlet {
             Date fechaInicio = new SimpleDateFormat("dd-MM-yyyy").parse(fechaIni);
             Date fechaFinal = new SimpleDateFormat("dd-MM-yyyy").parse(fechaFin);
         
+            File file = new File(path);
             ServletOutputStream out = response.getOutputStream();
-            //reporte = (JasperReport) JRLoader.loadObjectFromFile(getServletContext().getRealPath(path));
-            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(file);
             
             Map <String, Object> parametro = new HashMap();
             parametro.put("inicio", fechaInicio);
@@ -285,17 +283,16 @@ public class ControlReportes extends HttpServlet {
         
         response.setContentType("application/pdf");
         System.setProperty("java.awt.headless", "true");
-        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\ReportesPagosConfirmados.jasper";
+        String path = getServletContext().getRealPath("/WEB-INF/ReportesPagosConfirmados.jasper");
               
         Connection con = Conexion.getConexion();
         
         try {
+            File file = new File(path);
             ServletOutputStream out = response.getOutputStream();
-            //reporte = (JasperReport) JRLoader.loadObjectFromFile(getServletContext().getRealPath(path));
-            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(file);
             
-            Map <String, Object> parametro = new HashMap(); 
-            //JasperPrint jprint = JasperFillManager.fillReport(reporte, null, Conexion.getConexion());
+            Map <String, Object> parametro = new HashMap();
             JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, con);
             JRExporter exporter = new JRPdfExporter();
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, jprint);
@@ -312,17 +309,16 @@ public class ControlReportes extends HttpServlet {
         
         response.setContentType("application/pdf");
         System.setProperty("java.awt.headless", "true");
-        String path = "D:\\Documents\\NetBeansProjects\\CondominioCardenal\\web\\WEB-INF\\ReportesPagosEnEspera.jasper";
+        String path = getServletContext().getRealPath("/WEB-INF/ReportesPagosEnEspera.jasper");
               
         Connection con = Conexion.getConexion();
         
         try {
+            File file = new File(path);
             ServletOutputStream out = response.getOutputStream();
-            //reporte = (JasperReport) JRLoader.loadObjectFromFile(getServletContext().getRealPath(path));
-            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(file);
             
             Map <String, Object> parametro = new HashMap(); 
-            //JasperPrint jprint = JasperFillManager.fillReport(reporte, null, Conexion.getConexion());
             JasperPrint jprint = JasperFillManager.fillReport(reporte, parametro, con);
             JRExporter exporter = new JRPdfExporter();
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, jprint);

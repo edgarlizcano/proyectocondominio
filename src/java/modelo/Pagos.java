@@ -20,10 +20,7 @@ import javax.persistence.Table;
  *
  * @author Edgar
  */
-@Entity
-@Table(name = "pagos")
-@NamedQueries({
-    @NamedQuery(name = "Pagos.findAll", query = "SELECT p FROM Pagos p")})
+
 public class Pagos implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,6 +47,8 @@ public class Pagos implements Serializable {
     @ManyToOne(optional = false)
     private Bancos banco;
     
+    private Cuentas cuenta;
+    
     private Usuarios usuario;
 
     public Pagos() {
@@ -63,6 +62,14 @@ public class Pagos implements Serializable {
         this.nombreApellido = nombreApellido;
         this.referencia = referencia;
         this.banco = bancosidBancos;
+    }
+
+    public Cuentas getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuentas cuenta) {
+        this.cuenta = cuenta;
     }
 
     public boolean isEstatus() {

@@ -4,6 +4,7 @@
     Author     : Edgar
 --%>
 
+<%@page import="modelo.Pagos"%>
 <%@page import="db.ADOPagos"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="modelo.CasasHasCuotas"%>
@@ -31,42 +32,36 @@
                             <th scope="col">Monto</th>
                             <th scope="col">Estado del Pago</th>
                             <th scope="col">Banco</th>
-                            <th scope="col">ID Cuota</th>
-                            <th scope="col">Nombre Cuota</th>
-                            <th scope="col">ID Casa</th>
                             <th scope="col">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
                     <%-- Lista de todos los Usuarios --%>
                     <%
-                        ArrayList<CasasHasCuotas> lista = (ArrayList) request.getSession().getAttribute("lista");
-                        for (CasasHasCuotas c : lista) {
+                        ArrayList<Pagos> lista = (ArrayList) request.getSession().getAttribute("lista");
+                        for (Pagos c : lista) {
                     %>
                     <tr>
-                        <td><%= c.getPagos().getIdPagos() %></td>
-                        <td><%= c.getPagos().getFecha() %></td>
-                        <td><%= c.getPagos().getMonto() %></td>
+                        <td><%= c.getIdPagos() %></td>
+                        <td><%= c.getFecha() %></td>
+                        <td><%= c.getMonto() %></td>
                         <td>
                             <%
-                                if (c.getPagos().isEstatus()){
+                                if (c.isEstatus()){
                                     out.print("Confirmado");
                                 }else{
                                     out.print("En Espera");
                                 }
                             %>
                         </td>
-                        <td><%= c.getPagos().getBanco().getNombreBanco() %></td>
-                        <td><%= c.getCuotas().getIdCuotas() %></td>
-                        <td><%= c.getCuotas().getNombre() %></td>
-                        <td><%= c.getCasas().getIdCasas() %></td>
+                        <td><%= c.getBanco().getNombreBanco() %></td>
                         <td>
                             <%
-                                if (c.getPagos().isEstatus()){
+                                if (c.isEstatus()){
                                     out.print("Verificado");
                                 }else{
                                     %>
-                                        <a class="btn btn-success" role="button" href="ControladorPagos?accion=ConfirmarPago&id=<%= c.getPagos().getIdPagos() %>">Confirmar</a>
+                                        <a class="btn btn-success" role="button" href="ControladorPagos?accion=ConfirmarPago&id=<%= c.getIdPagos() %>">Confirmar</a>
                                     <%
                                 }
                             %>

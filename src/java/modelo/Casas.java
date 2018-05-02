@@ -8,16 +8,8 @@ package modelo;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 /**
  *
@@ -38,6 +30,8 @@ public class Casas implements Serializable {
     private Calles calles;
 
     private List<CasasHasCuotas> casasHasCuotasList;
+    
+    private Cuentas cuenta;
 
     public Casas() {
     }
@@ -45,6 +39,14 @@ public class Casas implements Serializable {
     public Casas(int idCasas, String nombreCasa) {
         this.idCasas = idCasas;
         this.nombreCasa = nombreCasa;
+    }
+
+    public Cuentas getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(Cuentas cuenta) {
+        this.cuenta = cuenta;
     }
     
     public int getIdCasas() {
